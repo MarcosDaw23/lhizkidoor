@@ -7,7 +7,7 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// 🔐si el usuario o profesor ya ha iniciado sesion, se sale y se vuelve a meter al rato, va directamente aqui y segun el rol, llega a su apartado
+// si el usuario o profesor ya ha iniciado sesion, se sale y se vuelve a meter al rato, va directamente aqui y segun el rol, llega a su apartado
 switch ($_SESSION['user']['rol']) {
     case 'profesor':
         header("Location: ./profesor/");
