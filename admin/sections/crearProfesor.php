@@ -7,7 +7,7 @@
             <div class="row justify-content-center">
               <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Regístrate</h1>
+                <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">registar un profesor</h1>
 
                 <div class="mb-4">
                   <div class="d-flex justify-content-between mb-1">
@@ -20,7 +20,7 @@
                   </div>
                 </div>
 
-                <form action="./controllers/registro_controller.php" method="post" id="registerForm" class="mx-1 mx-md-4">
+                <form action="./controllers/registroProfesor_controller.php" method="post" id="registerForm" class="mx-1 mx-md-4">
 
                   <!-- parte 1, sector, clase y cenntro-->
                   <div id="step1">
@@ -91,13 +91,6 @@
                       <input type="password" name="password2" id="password2" class="form-control" required>
                     </div>
 
-                    <div class="form-check d-flex justify-content-center mb-4">
-                      <input class="form-check-input me-2" type="checkbox" required id="form2Example3c">
-                      <label class="form-check-label" for="form2Example3c">
-                        Acepto los <a href="#!">términos de servicio</a>
-                      </label>
-                    </div>
-
                     <div class="d-flex justify-content-between">
                       <button type="button" id="btnBack" class="btn btn-secondary">Atrás</button>
                       <button type="submit" class="btn btn-success">Registrarme</button>
@@ -118,8 +111,6 @@
 $(document).ready(function(){
 
   // es un script que junto a los controles, cargan los sectores, clases al cargar lo anterior, pa que tenga sentido la opcion
-  //uso ajax para que solo recargue la parte del formualrio que quiero y asi no moleste la tonteria
-  //ariba esta la url para implementar la libreria (cambairlo par que sea dinamico)
   $('#centro').on('change', function(){
     const centro_id = $(this).val();
     if(centro_id){

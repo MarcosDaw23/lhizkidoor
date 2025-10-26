@@ -69,11 +69,9 @@ class AccesoBD_Auth {
         }
 
         $token = md5(uniqid(rand(), true));
-
         $sqlInsert = "INSERT INTO user (rol, nombre, apellido, mail, password, centro, sector, clase, token, fechaConfirmacion)
                     VALUES ($rol, '$nombre', '$apellido', '$email', '$password', $centro, $sector, $clase, '$token', NULL)";
         $db->lanzarSQL($sqlInsert);
-
         $db->cerrarConexion();
         return $token;
     }

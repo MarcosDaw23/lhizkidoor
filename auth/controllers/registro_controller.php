@@ -19,7 +19,7 @@ $clase      = $_POST['clase'] ?? null;
 $rol        = 3; 
 
 if ($pass1 !== $pass2) {
-    $_SESSION['mensaje'] = "Las contraseñas no coinciden.";
+    $_SESSION['mensaje'] = "Las contraseñas no coinciden, vuelva a introducirlas porfavor";
     $_SESSION['tipo_mensaje'] = "danger";
     header('Location: ../index.php?section=registro');
     exit;
@@ -71,7 +71,7 @@ if ($token) {
 
         $mailer->send();
 
-        $_SESSION['mensaje'] = "Tu cuenta ha sido creada, pero falta lconfirmarla, revisa tu correo Gmail";
+        $_SESSION['mensaje'] = "Tu cuenta ha sido creada, pero falta lconfirmarla, revisa tu correo gmail";
         $_SESSION['tipo_mensaje'] = "success";
         header("Location: ../index.php?section=confirmarCuenta");
         exit;
