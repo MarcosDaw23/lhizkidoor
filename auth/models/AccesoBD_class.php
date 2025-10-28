@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../core/config.php';
 require_once __DIR__ . '/../../core/database.php';
 
 class AccesoBD_Auth {
@@ -69,8 +70,8 @@ class AccesoBD_Auth {
         }
 
         $token = md5(uniqid(rand(), true));
-        $sqlInsert = "INSERT INTO user (rol, nombre, apellido, mail, password, centro, sector, clase, token, fechaConfirmacion)
-                    VALUES ($rol, '$nombre', '$apellido', '$email', '$password', $centro, $sector, $clase, '$token', NULL)";
+        $sqlInsert = "INSERT INTO user (rol, nombre, apellido, mail, password, centro, sector, clase, puntuacionIndividual, token, fechaConfirmacion)
+                    VALUES ($rol, '$nombre', '$apellido', '$email', '$password', $centro, $sector, $clase, 0, '$token', NULL)";
         $db->lanzarSQL($sqlInsert);
         $db->cerrarConexion();
         return $token;
@@ -125,17 +126,18 @@ class AccesoBD_Auth {
         }
     }
 
-    public function logout() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $_SESSION = [];          
-        session_destroy();       
-
-        header("Location: /1semestre/lhizkidoor/auth/index.php?section=login");
-        exit;
+  public function logout() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
     }
+
+    $_SESSION = [];
+    session_destroy();
+
+    header("Location: " . Config::$LOGIN);
+    exit;
+}
+
 
 }
 ?>

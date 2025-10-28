@@ -9,10 +9,11 @@ class User {
     private $centro;
     private $sector;
     private $clase;
+    private $puntuacionIndividual;
     private $token;
     private $fechaConfirmacion;
 
-    public function __construct($id, $rol, $nombre, $apellido, $email, $password, $centro, $sector, $clase, $token, $fechaConfirmacion) {
+    public function __construct($id, $rol, $nombre, $apellido, $email, $password, $centro, $sector, $clase, $puntuacionIndividual,  $token, $fechaConfirmacion) {
         $this->id = $id;
         $this->rol = $rol;
         $this->nombre = $nombre;
@@ -22,6 +23,7 @@ class User {
         $this->centro = $centro;
         $this->sector = $sector;
         $this->clase = $clase;
+        $this->puntuacionIndividual = $puntuacionIndividual;
         $this->token = $token;
         $this->fechaConfirmacion = $fechaConfirmacion;
     }
@@ -53,6 +55,9 @@ class User {
     }
     public function getClase() {
         return $this->clase;
+    }
+    public function getpuntuacionIndividual() {
+        return $this->puntuacionIndividual;
     }
     public function getToken() {
         return $this->token;
@@ -88,6 +93,9 @@ class User {
     }
     public function setClase($clase) {
         $this->clase = $clase;
+    }
+    public function setpuntuacionIndividual($puntuacionIndividual) {
+        $this->puntuacionIndividual = $puntuacionIndividual;
     }
     public function setToken($token) {
         $this->token = $token;

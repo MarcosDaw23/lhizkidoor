@@ -63,6 +63,12 @@ $usuario = $_SESSION['user'];
               <li class="nav-item">
                 <a class="nav-link btn btn-warning text-blue" href="./controllers/obtenerGlosario_controller.php">Ver glosario</a>
               </li>
+               <li class="nav-item">
+                <a class="nav-link btn btn-warning text-blue" href="index.php?section=juegos">Juegos</a>
+              </li>
+               <li class="nav-item">
+                <a class="nav-link btn btn-warning text-blue" href="./controllers/obtenerRanking_controller.php">Ranking</a>
+              </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['user'])){ ?>
