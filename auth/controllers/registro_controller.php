@@ -44,7 +44,7 @@ $bd = new AccesoBD_Auth();
 $token = $bd->registrarUsuario($user);
 
 if ($token) {
-    $link = "http://localhost/php/lhizkidoor/auth/index.php?section=confirmarCuenta&token=$token";
+    $link = "http://localhost/php/LHizkiDoor/lhizkidoor/auth/index.php?section=confirmarCuenta&token=$token";
 
     $mailer = new PHPMailer(true);
 

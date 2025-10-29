@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 <?php
 /**
  * Clase de configuración global del proyecto LHizkiDoor
@@ -39,7 +37,7 @@ class Config
     public static function init(): void
     {
         // Detecta el dominio actual y construye la ruta base completa
-        self::$BASE_URL = 'http://' . $_SERVER['HTTP_HOST'] . '/php/lhizkidoor/';
+        self::$BASE_URL = 'http://' . $_SERVER['HTTP_HOST'] . '/php/LHizkiDoor/lhizkidoor/';
 
         /** Carpetas principales */
         self::$PATH_AUTH    = self::$BASE_URL . 'auth/';
@@ -67,4 +65,3 @@ class Config
 // Ejecutar la inicialización automáticamente al cargar
 Config::init();
 ?>
->>>>>>> Stashed changes

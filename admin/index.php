@@ -5,7 +5,7 @@ spl_autoload_register(function ($class) {
         require_once $path;
     }
 });
-
+//los index son todos los de mikel
 session_start();
 if (!isset($_SESSION['user'])) {
     header("Location: /1semestre/lhizkidoor/auth/index.php?section=login");
@@ -57,6 +57,27 @@ $usuario = $_SESSION['user'];
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+         <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <?php if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 1): ?>
+              <li class="nav-item">
+                <a class="nav-link btn btn-warning text-blue" href="./controllers/obtenerUsuarios_controller.php">Gestion de Usuarios</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn btn-warning text-blue" href="./control/obtenerEstadisticas_controller.php">Estadisticas</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn btn-warning text-blue" href="index.php?section=crearProfesor">Crear Profesor</a>
+              </li>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['user'])){ ?>
+            <a href="index.php?s=ajustes" class="btn btn-secondary">
+              <i class="bi bi-gear"></i> 
+            </a>
+            <?php }?>
+          </form>
+        </div>
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
         </div>
