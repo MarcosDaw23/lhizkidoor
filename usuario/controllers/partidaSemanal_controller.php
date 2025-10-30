@@ -13,27 +13,26 @@ $bd = new AccesoBD_Usuario();
 
 switch ($action) {
 
-    // JUGAR PARTIDA SEMANAL
-    case 'jugar':
-        if ($bd->haJugadoEstaSemana($usuarioId)) {
-            header("Location: ../index.php");
-            exit;
-        }
-
-        // Cargar 10 preguntas aleatorias para la partida semanal
-        $_SESSION['preguntas'] = $bd->obtenerPreguntas();
-        $_SESSION['indicePregunta'] = 0;
-        $_SESSION['puntuacion'] = 0;
-        $_SESSION['modo'] = 'semanal'; // identificador del modo
-
-        // Registrar la partida semanal para este usuario
-        $bd->registrarPartidaSemanal($usuarioId);
-
-        header("Location: ../index.php?section=preguntas");
+   case 'jugar':
+    if ($bd->haJugadoEstaSemana($usuarioId)) {
+        header("Location: ../index.php");
         exit;
+    }
+
+    $_SESSION['preguntas'] = $bd->obtenerPreguntasPorRamaUsuario($usuarioId);
+    $_SESSION['indicePregunta'] = 0;
+    $_SESSION['puntuacion'] = 0;
+    $_SESSION['modo'] = 'semanal';
+
+    $_SESSION['partida_id'] = $bd->registrarPartidaSemanal();
+
+    $_SESSION['yaJugo'] = true;
+    $_SESSION['semana_jugada'] = date('W');
+
+    header("Location: ../index.php?section=preguntas");
+    exit;
 
 
-    // REPASAR (sin puntos)
     case 'repasar':
         $palabra = $bd->obtenerPalabraAleatoria();
         $_SESSION['palabra'] = $palabra;
@@ -41,7 +40,6 @@ switch ($action) {
         exit;
 
 
-    // VERIFICAR (no se usa ya con el nuevo flujo)
     case 'verificar':
         $idPalabra = $_POST['id'] ?? null;
         $opcion = $_POST['opcion'] ?? null;
@@ -67,13 +65,12 @@ switch ($action) {
         $resultado = ($opcion == $correcta);
 
         $_SESSION['mensaje'] = $resultado
-            ? "✅ ¡Correcto! La respuesta era '{$palabra['eusk' . $correcta]}'"
-            : "❌ Incorrecto. La respuesta correcta era '{$palabra['eusk' . $correcta]}'";
+            ? "¡Correcto! La respuesta era '{$palabra['eusk' . $correcta]}'"
+            : "Incorrecto. La respuesta correcta era '{$palabra['eusk' . $correcta]}'";
         $_SESSION['tipo_mensaje'] = $resultado ? "success" : "danger";
 
         header("Location: ../index.php");
         break;
-
 
     default:
         header("Location: ../index.php");

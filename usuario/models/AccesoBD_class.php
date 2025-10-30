@@ -3,7 +3,6 @@ require_once __DIR__ . '/../../core/database.php';
 
 class AccesoBD_Usuario {
 
-    // Obtener la rama a partir del sector
     public function obtenerRamaPorSector($sectorId) {
         $db = new AccesoBD();
         $conn = $db->conexion;
@@ -21,7 +20,6 @@ class AccesoBD_Usuario {
         return $result['nombre'] ?? null;
     }
 
-    // Diccionario completo
     public function obtenerDiccionarioCompleto() {
         $db = new AccesoBD();
         $sql = "SELECT id, rama, cast, eusk1, eusk2, eusk3, definicion 
@@ -38,7 +36,6 @@ class AccesoBD_Usuario {
         return $diccionario;
     }
 
-    // Diccionario por rama
     public function obtenerDiccionarioPorRama($ramaId, $busqueda = '') {
         $db = new AccesoBD();
         $conn = $db->conexion;
@@ -86,9 +83,7 @@ class AccesoBD_Usuario {
         return $ramas;
     }
 
-    /**
-     * Verifica si el usuario ya ha jugado esta semana.
-     */
+  
     public function haJugadoEstaSemana($usuarioId) {
         $db = new AccesoBD();
         $conn = $db->conexion;
@@ -108,45 +103,34 @@ class AccesoBD_Usuario {
         return ($resultado['total'] ?? 0) > 0;
     }
 
-    /**
-     * Registra una nueva partida semanal (si no existe).
-     */
-    public function registrarPartidaSemanal($usuarioId) {
-        $db = new AccesoBD();
-        $conn = $db->conexion;
+   public function registrarPartidaSemanal() {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
 
-        $semanaActual = date('W');
+    $semanaActual = date('W');
 
-        // Buscar o crear la partida de esta semana
-        $sqlPartida = "SELECT id FROM partidas WHERE semana = ?";
-        $stmt = $conn->prepare($sqlPartida);
-        $stmt->bind_param("i", $semanaActual);
-        $stmt->execute();
-        $partida = $stmt->get_result()->fetch_assoc();
+    $sqlPartida = "SELECT id FROM partidas WHERE semana = ?";
+    $stmt = $conn->prepare($sqlPartida);
+    $stmt->bind_param("i", $semanaActual);
+    $stmt->execute();
+    $partida = $stmt->get_result()->fetch_assoc();
 
-        if (!$partida) {
-            $sqlInsert = "INSERT INTO partidas (semana, fechaJugada) VALUES (?, NOW())";
-            $stmt2 = $conn->prepare($sqlInsert);
-            $stmt2->bind_param("i", $semanaActual);
-            $stmt2->execute();
-            $partidaId = $conn->insert_id;
-        } else {
-            $partidaId = $partida['id'];
-        }
-
-        // Registrar al usuario en la partida semanal
-        $sqlPU = "INSERT INTO partida_user (user_id, partida_id, fechaJugada)
-                  VALUES (?, ?, NOW())";
-        $stmt3 = $conn->prepare($sqlPU);
-        $stmt3->bind_param("ii", $usuarioId, $partidaId);
-        $stmt3->execute();
-
-        $db->cerrarConexion();
+    if (!$partida) {
+        $sqlInsert = "INSERT INTO partidas (semana, fechaJugada) VALUES (?, NOW())";
+        $stmt2 = $conn->prepare($sqlInsert);
+        $stmt2->bind_param("i", $semanaActual);
+        $stmt2->execute();
+        $partidaId = $conn->insert_id;
+    } else {
+        $partidaId = $partida['id'];
     }
 
-    /**
-     * Devuelve una palabra aleatoria.
-     */
+    $db->cerrarConexion();
+    return $partidaId;
+}
+
+
+
     public function obtenerPalabraAleatoria() {
         $db = new AccesoBD();
         $conn = $db->conexion;
@@ -181,35 +165,49 @@ class AccesoBD_Usuario {
         return $preguntas;
     }
 
-    /**
-     * Actualiza la puntuación total del sector del usuario.
-     */
-    public function actualizarPuntuacionClase($usuarioId, $puntuacionFinal) {
-        $db = new AccesoBD();
-        $conn = $db->conexion;
+public function actualizarPuntuacionClase($usuarioId, $puntuacionFinal) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
 
-        // Obtener el sector del usuario
-        $sqlClase = "SELECT sector FROM user WHERE id = ?";
-        $stmt = $conn->prepare($sqlClase);
-        $stmt->bind_param("i", $usuarioId);
-        $stmt->execute();
-        $res = $stmt->get_result()->fetch_assoc();
-        $claseId = $res['sector'];
+    $sqlSector = "SELECT sector FROM user WHERE id = ?";
+    $stmt = $conn->prepare($sqlSector);
+    $stmt->bind_param("i", $usuarioId);
+    $stmt->execute();
+    $res = $stmt->get_result()->fetch_assoc();
+    $sectorId = $res['sector'];
 
-        // Sumar la nueva puntuación al sector
-        $sqlUpdate = "UPDATE sectores
-                      SET puntuacionTotal = puntuacionTotal + ?
-                      WHERE id = ?";
-        $stmt2 = $conn->prepare($sqlUpdate);
-        $stmt2->bind_param("ii", $puntuacionFinal, $claseId);
-        $stmt2->execute();
-
+    if (!$sectorId) {
         $db->cerrarConexion();
+        return;
     }
 
-    /**
-     * Obtiene la partida actual de la semana.
-     */
+    $sqlUpdateSector = "UPDATE sectores
+                        SET puntuacionTotal = puntuacionTotal + ?
+                        WHERE id = ?";
+    $stmt2 = $conn->prepare($sqlUpdateSector);
+    $stmt2->bind_param("ii", $puntuacionFinal, $sectorId);
+    $stmt2->execute();
+
+    $sqlRama = "SELECT rama FROM sectores WHERE id = ?";
+    $stmt3 = $conn->prepare($sqlRama);
+    $stmt3->bind_param("i", $sectorId);
+    $stmt3->execute();
+    $resRama = $stmt3->get_result()->fetch_assoc();
+    $ramaId = $resRama['rama'];
+
+    if ($ramaId) {
+        $sqlUpdateRama = "UPDATE ramas
+                          SET puntuacionRamas = puntuacionRamas + ?
+                          WHERE id = ?";
+        $stmt4 = $conn->prepare($sqlUpdateRama);
+        $stmt4->bind_param("ii", $puntuacionFinal, $ramaId);
+        $stmt4->execute();
+    }
+
+    $db->cerrarConexion();
+}
+
+
     public function obtenerPartidaSemanaActual() {
         $db = new AccesoBD();
         $conn = $db->conexion;
@@ -233,28 +231,77 @@ class AccesoBD_Usuario {
         return $res['id'];
     }
 
-    /**
-     * Registra el resultado del usuario en una partida concreta.
-     */
-    public function registrarPartidaUsuario($usuarioId, $partidaId, $puntuacion) {
-        $db = new AccesoBD();
-        $conn = $db->conexion;
+    
+   public function registrarPartidaUsuario($usuarioId, $partidaId, $puntuacion) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
 
-        $sql = "INSERT INTO partida_user (user_id, partida_id, puntuacion, fechaJugada)
-                VALUES (?, ?, ?, NOW())";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iii", $usuarioId, $partidaId, $puntuacion);
-        $stmt->execute();
+    $sqlCheck = "SELECT id FROM partida_user WHERE user_id = ? AND partida_id = ?";
+    $stmt = $conn->prepare($sqlCheck);
+    $stmt->bind_param("ii", $usuarioId, $partidaId);
+    $stmt->execute();
+    $res = $stmt->get_result()->fetch_assoc();
 
-        // Actualizar puntuación total del usuario
-        $sqlUpdate = "UPDATE user 
+    if ($res) {
+        $sqlUpdate = "UPDATE partida_user SET puntuacion = ?, fechaJugada = NOW() WHERE id = ?";
+        $stmt2 = $conn->prepare($sqlUpdate);
+        $stmt2->bind_param("ii", $puntuacion, $res['id']);
+        $stmt2->execute();
+    } else {
+        $sqlInsert = "INSERT INTO partida_user (user_id, partida_id, puntuacion, fechaJugada)
+                      VALUES (?, ?, ?, NOW())";
+        $stmt3 = $conn->prepare($sqlInsert);
+        $stmt3->bind_param("iii", $usuarioId, $partidaId, $puntuacion);
+        $stmt3->execute();
+    }
+
+    $sqlUpdateUser = "UPDATE user 
                       SET puntuacionIndividual = puntuacionIndividual + ? 
                       WHERE id = ?";
-        $stmt2 = $conn->prepare($sqlUpdate);
-        $stmt2->bind_param("ii", $puntuacion, $usuarioId);
-        $stmt2->execute();
+    $stmtUser = $conn->prepare($sqlUpdateUser);
+    $stmtUser->bind_param("ii", $puntuacion, $usuarioId);
+    $stmtUser->execute();
 
+    $db->cerrarConexion();
+}
+
+public function obtenerPreguntasPorRamaUsuario($usuarioId) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sqlRama = "SELECT s.rama 
+                FROM user u
+                INNER JOIN sectores s ON u.sector = s.id
+                WHERE u.id = ?";
+    $stmt = $conn->prepare($sqlRama);
+    $stmt->bind_param("i", $usuarioId);
+    $stmt->execute();
+    $res = $stmt->get_result()->fetch_assoc();
+    $ramaId = $res['rama'] ?? null;
+
+    if (!$ramaId) {
         $db->cerrarConexion();
+        return []; // No se encontró rama
     }
+
+    $sqlPreguntas = "SELECT id, cast, eusk1, eusk2, eusk3, ondo, definicion
+                     FROM diccionario
+                     WHERE rama = ?
+                     ORDER BY RAND()
+                     LIMIT 10";
+    $stmt2 = $conn->prepare($sqlPreguntas);
+    $stmt2->bind_param("i", $ramaId);
+    $stmt2->execute();
+    $result = $stmt2->get_result();
+
+    $preguntas = [];
+    while ($row = $result->fetch_assoc()) {
+        $preguntas[] = $row;
+    }
+
+    $db->cerrarConexion();
+    return $preguntas;
+}
+
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-//mirar bd, la parte del diccionario, para representaer en el glosario, la parte de euskera duda
+//usar el glosaro, yo del futuro, ya sabes, cambialo en algun momento
 $diccionario = $_SESSION['diccionario'] ?? [];
 $ramas = $_SESSION['ramas'] ?? [];
 $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
@@ -55,7 +55,7 @@ $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
 </div>
 
 <script>
-//mocer todos los script a la carpeta js pa ponerlo limpio
+    //mover los scripts a otro sitio, limpiar codigo wey
 document.addEventListener('DOMContentLoaded', () => {
 const buscarInput = document.getElementById('buscar');
 const tabla = document.getElementById('tablaGlosario');
@@ -65,7 +65,6 @@ const form = document.getElementById('filtroGlosario');
 
 buscarInput.addEventListener('input', () => {
     const filtro = buscarInput.value.toLowerCase();
-//pa recoorer lasfilas quitando el encabezado
     for (let i = 1; i < filas.length; i++) {
     const celdas = filas[i].getElementsByTagName('td');
     let coincide = false;

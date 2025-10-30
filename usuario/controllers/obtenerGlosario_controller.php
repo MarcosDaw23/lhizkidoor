@@ -6,7 +6,7 @@ if (!isset($_SESSION['user'])) {
     header("Location: ../../auth/index.php?section=login");
     exit;
 }
-
+//hay que cAMBIAR la obtencion de daros d ela tabla diccionario a la tabla glosario
 $usuario = $_SESSION['user'];
 $sectorId = $usuario['sector'];
 
