@@ -6,7 +6,7 @@ if (!isset($_SESSION['user'])) {
     header("Location: ../../auth/index.php?section=login");
     exit;
 }
-
+//hay que cAMBIAR la obtencion de daros d ela tabla diccionario a la tabla glosario
 $usuario = $_SESSION['user'];
 $sectorId = $usuario['sector'];
 
@@ -27,12 +27,12 @@ $ramaSeleccionada = $_GET['rama'] ?? $ramaUsuarioId;
 $busqueda = $_GET['buscar'] ?? ''; // nuevo filtro por palabra
 
 if (!empty($ramaSeleccionada)) {
-    $diccionario = $bd->obtenerDiccionarioPorRama($ramaSeleccionada, $busqueda);
+    $glosario = $bd->obtenerGlosarioPorRama($ramaSeleccionada, $busqueda);
 } else {
-    $diccionario = $bd->obtenerDiccionarioCompleto($busqueda);
+    $glosario = $bd->obtenerGlosarioCompleto($busqueda);
 }
 
-$_SESSION['diccionario'] = $diccionario;
+$_SESSION['glosario'] = $glosario;
 $_SESSION['ramas'] = $ramas;
 $_SESSION['ramaSeleccionada'] = $ramaSeleccionada;
 $_SESSION['busqueda'] = $busqueda;

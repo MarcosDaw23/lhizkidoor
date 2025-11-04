@@ -7,6 +7,12 @@ spl_autoload_register(function ($class) {
 });
 
 session_start();
+if (isset($_SESSION['semana_jugada']) && $_SESSION['semana_jugada'] != date('W')) {
+    $_SESSION['yaJugo'] = false;
+    $_SESSION['semana_jugada'] = date('W'); // actualiza la semana actual, pero solo del usuarfio, tengo que añadir la semana de la bd pa que sea automatizado
+}
+
+
 if (!isset($_SESSION['user'])) {
     header("Location: /1semestre/lhizkidoor/auth/index.php?section=login");
     exit;
@@ -67,7 +73,7 @@ $usuario = $_SESSION['user'];
                 <a class="nav-link btn btn-warning text-blue" href="index.php?section=juegos">Juegos</a>
               </li>
                <li class="nav-item">
-                <a class="nav-link btn btn-warning text-blue" href="./controllers/obtenerRanking_controller.php">Ranking</a>
+                <a class="nav-link btn btn-warning text-blue" href="./sections/rankings.php">Ranking</a>
               </li>
             <?php endif; ?>
 
