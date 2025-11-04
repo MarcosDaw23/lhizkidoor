@@ -7,6 +7,7 @@ spl_autoload_register(function ($class) {
 });
 
 session_start();
+
 if (!isset($_SESSION['user'])) {
     header("Location: /1semestre/lhizkidoor/auth/index.php?section=login");
     exit;
@@ -57,6 +58,27 @@ $usuario = $_SESSION['user'];
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+         <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <?php if (isset($_SESSION['user']) && $_SESSION['user']['rol'] == 2): ?>
+              <li class="nav-item">
+                <a class="nav-link btn btn-warning text-blue" href="index.php?section=SumarPalabras">Sumar Palabras</a>
+              </li>
+               <li class="nav-item">
+                <a class="nav-link btn btn-warning text-blue" href="index.php?section=CrearEventos">Crear Eventos</a>
+              </li>
+               <li class="nav-item">
+                <a class="nav-link btn btn-warning text-blue" href="./controllers/obtenerRanking_controller.php">Ranking</a>
+              </li>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['user'])){ ?>
+            <a href="index.php?s=ajustes" class="btn btn-secondary">
+              <i class="bi bi-gear"></i> 
+            </a>
+            <?php }?>
+          </form>
+        </div>
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
         </div>
