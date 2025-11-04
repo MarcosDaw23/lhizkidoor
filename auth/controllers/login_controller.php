@@ -35,9 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user'] = [
             'id' => $resultado['id'],
             'nombre' => $resultado['nombre'],
+            'centro' => $resultado['centro'],
+            'clase' => $resultado['clase'],
+            'sector' => $resultado['sector'],
             'rol' => $resultado['rol']
         ];
-
         // ✅ Comprobamos si ya jugó esta semana
         $bdUsuario = new AccesoBD_Usuario();
         $_SESSION['yaJugo'] = $bdUsuario->haJugadoEstaSemana($resultado['id']);

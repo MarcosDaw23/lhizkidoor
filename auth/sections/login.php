@@ -9,7 +9,7 @@
 
                 <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Accede a LHizki</h1>
 
-                <form action="/1semestre/lhizkidoor/auth/controllers/login_controller.php" method="post" class="mx-1 mx-md-4">
+                <form action="/php/LHizkiDoor/lhizkidoor/auth/controllers/login_controller.php" method="post" class="mx-1 mx-md-4">
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                     <div data-mdb-input-init class="form-outline flex-fill mb-0">

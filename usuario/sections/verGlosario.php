@@ -1,12 +1,12 @@
 <?php
 //usar el glosaro, yo del futuro, ya sabes, cambialo en algun momento
-$diccionario = $_SESSION['diccionario'] ?? [];
+$glosario = $_SESSION['glosario'] ?? [];
 $ramas = $_SESSION['ramas'] ?? [];
 $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
 ?>
 
 <div class="container mt-4">
-<h2 class="text-center mb-4">glosario (diccionario en bd)</h2>
+<h2 class="text-center mb-4">GLOSARIO</h2>
 
 <form id="filtroGlosario" method="GET" action="<?php echo './controllers/obtenerGlosario_controller.php'; ?>" class="d-flex flex-wrap justify-content-center gap-2 mb-4">
 
@@ -24,7 +24,7 @@ $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
     <button type="submit" class="btn btn-primary">filtrar</button>
 </form>
 
-<?php if (empty($diccionario)): ?>
+<?php if (empty($glosario)): ?>
     <div class="alert alert-warning text-center">No se encontraron resultados</div>
 <?php else: ?>
     <div class="table-responsive">
@@ -32,19 +32,15 @@ $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
         <thead class="table-dark">
         <tr>
             <th>Castellano</th>
-            <th>Euskera 1</th>
-            <th>Euskera 2</th>
-            <th>Euskera 3</th>
+            <th>Euskera</th>
             <th>Definición</th>
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($diccionario as $d): ?>
+        <?php foreach ($glosario as $d): ?>
             <tr>
             <td><?= htmlspecialchars($d['cast']) ?></td>
-            <td><?= htmlspecialchars($d['eusk1']) ?></td>
-            <td><?= htmlspecialchars($d['eusk2']) ?></td>
-            <td><?= htmlspecialchars($d['eusk3']) ?></td>
+            <td><?= htmlspecialchars($d['eusk']) ?></td>
             <td><?= htmlspecialchars($d['definicion']) ?></td>
             </tr>
         <?php endforeach; ?>

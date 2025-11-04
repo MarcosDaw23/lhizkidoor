@@ -27,12 +27,12 @@ $ramaSeleccionada = $_GET['rama'] ?? $ramaUsuarioId;
 $busqueda = $_GET['buscar'] ?? ''; // nuevo filtro por palabra
 
 if (!empty($ramaSeleccionada)) {
-    $diccionario = $bd->obtenerDiccionarioPorRama($ramaSeleccionada, $busqueda);
+    $glosario = $bd->obtenerGlosarioPorRama($ramaSeleccionada, $busqueda);
 } else {
-    $diccionario = $bd->obtenerDiccionarioCompleto($busqueda);
+    $glosario = $bd->obtenerGlosarioCompleto($busqueda);
 }
 
-$_SESSION['diccionario'] = $diccionario;
+$_SESSION['glosario'] = $glosario;
 $_SESSION['ramas'] = $ramas;
 $_SESSION['ramaSeleccionada'] = $ramaSeleccionada;
 $_SESSION['busqueda'] = $busqueda;

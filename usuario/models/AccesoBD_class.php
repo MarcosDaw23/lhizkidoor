@@ -3,6 +3,40 @@ require_once __DIR__ . '/../../core/database.php';
 
 class AccesoBD_Usuario {
 
+    public function actualizarPuntuacionClase($usuarioId, $puntuacionFinal) {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        // Obtener el sector del usuario
+        $sqlClase = "SELECT sector FROM user WHERE id = ?";
+        $stmt = $conn->prepare($sqlClase);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        $claseId = $res['sector'];
+
+        $db->cerrarConexion();
+    }
+
+    public function obtenerCentroById($centroId) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT nombre 
+            FROM centro
+            WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $centroId); // ✅ corregido
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    $db->cerrarConexion();
+
+    // ✅ devuelve solo el nombre, o 'Desconocido' si no existe
+    return $result['nombre'] ?? 'Desconocido';
+    }
+
+
     public function obtenerRamaPorSector($sectorId) {
         $db = new AccesoBD();
         $conn = $db->conexion;
@@ -20,6 +54,12 @@ class AccesoBD_Usuario {
         return $result['nombre'] ?? null;
     }
 
+    public function obtenerGlosarioPorRama($ramaId, $busqueda = '') {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        $sql = "SELECT id, rama, cast, eusk, definicion
+                FROM glosario
     public function obtenerDiccionarioCompleto() {
         $db = new AccesoBD();
         $sql = "SELECT id, rama, cast, eusk1, eusk2, eusk3, definicion 
@@ -302,6 +342,162 @@ public function obtenerPreguntasPorRamaUsuario($usuarioId) {
     $db->cerrarConexion();
     return $preguntas;
 }
+
+public function obtenerRankingRamas($centro){
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT r.nombre AS rama, ranking.puntuacionRanking
+            FROM ranking
+            INNER JOIN ramas r ON ranking.rama = r.id
+            WHERE ranking.centro = ?
+            ORDER BY ranking.puntuacionRanking DESC";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $centro);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $ranking = [];
+    while ($fila = $result->fetch_assoc()) {
+        $ranking[] = $fila;
+    }
+
+    $db->cerrarConexion();
+    return $ranking;
+}
+
+public function actualizarRanking($centro, $rama) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+    $sql = "UPDATE ranking
+            SET puntuacionRanking = (
+            SELECT SUM(u.puntuacionIndividual)
+            FROM user u
+                LEFT JOIN clases c ON u.clase = c.id
+                LEFT JOIN centro_sector cs ON cs.sector = c.sector
+                LEFT JOIN sectores s ON cs.sector = s.id
+                LEFT JOIN ramas r ON s.rama = r.id
+                WHERE cs.centro = ?
+                AND r.id = ?)
+            WHERE centro = ?
+            AND rama = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iiii", $centro, $rama, $centro, $rama);
+    $stmt->execute();
+
+    $db->cerrarConexion();
+}
+
+public function obtenerRankingClaseIndividual($centro){
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT u.nombre AS usuario, c.nombre AS clase, u.puntuacionIndividual
+            FROM user u
+            INNER JOIN clases c ON u.clase = c.id
+            WHERE u.centro = ?
+            ORDER BY u.puntuacionIndividual DESC";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $centro);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $ranking = [];
+    while ($fila = $result->fetch_assoc()) {
+        $ranking[] = $fila;
+    }
+
+    $db->cerrarConexion();
+    return $ranking;
+}
+
+public function obtenerRankingClases($clase){
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT c.nombre AS clase, ranking_clases.puntuacionClase
+            FROM ranking_clases
+            INNER JOIN clases c ON ranking_clases.clase = c.id
+            WHERE ranking_clases.clase = ?
+            ORDER BY ranking_clases.puntuacionClase DESC;";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $clase);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $ranking = [];
+    while ($fila = $result->fetch_assoc()) {
+        $ranking[] = $fila;
+    }
+
+    $db->cerrarConexion();
+    return $ranking;
+}
+
+public function actualizarRankingClase($centro, $clase) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+    $sql = "UPDATE ranking_clases
+            SET puntuacionClase = (
+            SELECT SUM(u.puntuacionIndividual)
+            FROM user u
+                LEFT JOIN clases c ON u.clase = c.id
+                WHERE c.id = ?)
+            WHERE centro = ?
+            AND clase = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iii", $clase, $centro, $clase);
+    $stmt->execute();
+
+    $db->cerrarConexion();
+}
+
+public function obtenerRankingSectores($sector){
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT s.nombre AS sector, ranking_sectores.puntuacionSector
+            FROM ranking_sectores
+            INNER JOIN sectores s ON ranking_sectores.sector = s.id
+            WHERE ranking_sectores.sector = ?
+            ORDER BY ranking_sectores.puntuacionSector DESC";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $sector);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $ranking = [];
+    while ($fila = $result->fetch_assoc()) {
+        $ranking[] = $fila;
+    }
+
+    $db->cerrarConexion();
+    return $ranking;
+}
+
+public function actualizarRankingSectores($centro, $sector) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+    $sql = "UPDATE ranking_sectores
+            SET puntuacionSector = (
+            SELECT SUM(u.puntuacionIndividual)
+            FROM user u
+                LEFT JOIN clases c ON u.clase = c.id
+                LEFT JOIN centro_sector cs ON cs.sector = c.sector
+                WHERE cs.sector = ?
+            WHERE centro = ?
+            AND sector = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iiii", $sector, $centro, $sector);
+    $stmt->execute();
+
+    $db->cerrarConexion();
+}
+
 
 }
 ?>
