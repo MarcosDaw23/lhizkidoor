@@ -6,12 +6,8 @@ class Ranking {
     private $sector;
     private $puntuacionRanking;
 
-    public function __construct($id, $rama, $clase, $sector, $puntuacionRanking) {
-        $this->id = $id;
-        $this->rama = $rama;
-        $this->clase = $clase;
-        $this->sector = $sector;
-        $this->puntuacionRanking = $puntuacionRanking;
+    public function __construct() {
+
     }
 
     public function getId() {

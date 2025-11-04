@@ -13,7 +13,6 @@ $action = $_GET['action'] ?? 'start';
 
 switch ($action) {
 
-    // INICIO DE PREGUNTAS (modo normal)
     case 'start':
         $_SESSION['preguntas'] = $bd->obtenerPreguntas();
         $_SESSION['indicePregunta'] = 0;

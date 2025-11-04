@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 <?php
 class AccesoBD {
     const RUTA = "localhost";
@@ -32,4 +30,4 @@ class AccesoBD {
     }
 }
 ?>
->>>>>>> Stashed changes
+

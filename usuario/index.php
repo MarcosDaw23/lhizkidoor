@@ -67,7 +67,7 @@ $usuario = $_SESSION['user'];
                 <a class="nav-link btn btn-warning text-blue" href="index.php?section=juegos">Juegos</a>
               </li>
                <li class="nav-item">
-                <a class="nav-link btn btn-warning text-blue" href="./controllers/obtenerRanking_controller.php">Ranking</a>
+                <a class="nav-link btn btn-warning text-blue" href="./sections/rankings.php">Ranking</a>
               </li>
             <?php endif; ?>
 

@@ -1,17 +1,8 @@
 <?php
-/*
-if (!isset($_SESSION['user'])) {
-    header("Location: /1semestre/lhizkidoor/auth/index.php?section=login");
-    exit;
-}
-*/
 require_once __DIR__ . '/../../core/config.php';
-echo "<!-- Config cargado: " . (isset(Config::$BASE_URL) ? 'ok' : 'fail') . " -->";
-require_once __DIR__ . '/../models/AccesoBD_class.php';
-$bd = new AccesoBD_Usuario();
-$usuarioId = $_SESSION['user']['id'];
 
-$yaJugo = $bd->haJugadoEstaSemana($usuarioId);
+// ✅ Usamos el valor de sesión sin tocar la base de datos
+$yaJugo = $_SESSION['yaJugo'] ?? false;
 ?>
 
 <div class="text-center mt-5">
