@@ -69,10 +69,11 @@ $usuario = $_SESSION['user'];
               <div class="user-name"><?php echo htmlspecialchars($usuario['nombre']); ?></div>
               <div class="user-role">Profesor</div>
             </div>
-            <a href="/lhizkidoor-juan/profesor/index.php?section=perfil" class="settings-icon" title="Configuración">
+            <a href="index.php?section=perfil" class="settings-icon" title="Configuración">
               <i class="bi bi-gear"></i>
             </a>
           </div>
+        </div>
       </aside>
 
       <div class="main-content">

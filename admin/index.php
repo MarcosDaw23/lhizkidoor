@@ -26,7 +26,7 @@ $usuario = $_SESSION['user'];
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/estilo.css?v=2.0">
+    <link rel="stylesheet" href="css/estilos.css">
     
   </head>
 
@@ -39,40 +39,41 @@ $usuario = $_SESSION['user'];
         </div>
 
         <nav class="sidebar-menu">
-          <div class="menu-section-title">Principal</div>
-          <a href="./index.php" class="menu-item active">
-            <i class="bi bi-speedometer2"></i>
-            <span>Dashboard</span>
-          </a>
+        <div class="menu-section-title">Principal</div>
+        <a href="./index.php" class="menu-item <?php echo (!isset($_GET['section']) || $_GET['section'] === 'home') ? 'active' : ''; ?>">
+          <i class="bi bi-speedometer2"></i>
+          <span>Dashboard</span>
+        </a>
 
-          <div class="menu-section-title">Gestión</div>
-          <a href="./controllers/obtenerUsuarios_controller.php" class="menu-item">
-            <i class="bi bi-people"></i>
-            <span>Glosario</span>
-          </a>
-          <a href="index.php?section=crearProfesor" class="menu-item">
-            <i class="bi bi-person-plus"></i>
-            <span>Crear eventos</span>
-          </a>
-          <a href="./control/obtenerEstadisticas_controller.php" class="menu-item">
-            <i class="bi bi-bar-chart"></i>
-            <span>Estadísticas</span>
-          </a>
+        <div class="menu-section-title">Gestión</div>
+        <a href="./controllers/obtenerUsuarios_controller.php" class="menu-item <?php echo (isset($_GET['section']) && $_GET['section'] === 'gestionUsuarios') ? 'active' : ''; ?>">
+          <i class="bi bi-people"></i>
+          <span>Usuarios</span>
+        </a>
+        <a href="index.php?section=crearProfesor" class="menu-item <?php echo (isset($_GET['section']) && $_GET['section'] === 'crearProfesor') ? 'active' : ''; ?>">
+          <i class="bi bi-person-plus"></i>
+          <span>Crear Profesor</span>
+        </a>
+        <a href="./control/obtenerEstadisticas_controller.php" class="menu-item <?php echo (isset($_GET['section']) && $_GET['section'] === 'estadisticas') ? 'active' : ''; ?>">
+          <i class="bi bi-bar-chart"></i>
+          <span>Estadísticas</span>
+        </a>
         </nav>
 
-        <div class="sidebar-footer">
+         <div class="sidebar-footer">
           <div class="user-info-sidebar">
             <div class="user-avatar">
               <?php echo strtoupper(substr($usuario['nombre'], 0, 1)); ?>
             </div>
             <div class="user-details">
               <div class="user-name"><?php echo htmlspecialchars($usuario['nombre']); ?></div>
-              <div class="user-role">Profesor</div>
+              <div class="user-role">Administrador</div>
             </div>
-            <a href="/lhizkidoor-juan/profesor/index.php?section=perfil" class="settings-icon" title="Configuración">
+            <a href="/lhizkidoor-juan/admin/index.php?section=perfil" class="settings-icon" title="Configuración">
               <i class="bi bi-gear"></i>
             </a>
           </div>
+        </div>
       </aside>
 
       <div class="main-content">
