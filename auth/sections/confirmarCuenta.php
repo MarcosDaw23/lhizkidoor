@@ -180,8 +180,8 @@ if (isset($_GET['token'])) {
     </a>
   <?php else: ?>
     <a href="https://mail.google.com" class="btn-secondary-confirm">
-      <i class="bi bi-arrow-left"></i>
-      <span>Revisar correo</span>
+      <i class="bi bi-envelope-exclamation-fill"></i>
+      <span>Confirmar correo</span>
     </a>
   <?php endif; ?>
 </div>
