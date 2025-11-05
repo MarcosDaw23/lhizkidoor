@@ -1,7 +1,7 @@
 <?php
 
 if (!isset($_SESSION['user'])) {
-    header("Location: /lhizkidoor-juan/auth/index.php?section=login");
+    header("Location: /lhizkidoor/auth/index.php?section=login");
     exit;
 }
 

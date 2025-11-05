@@ -60,28 +60,6 @@ class AccesoBD_Usuario {
 
         $sql = "SELECT id, rama, cast, eusk, definicion
                 FROM glosario
-    public function obtenerDiccionarioCompleto() {
-        $db = new AccesoBD();
-        $sql = "SELECT id, rama, cast, eusk1, eusk2, eusk3, definicion 
-                FROM diccionario
-                ORDER BY rama ASC, cast ASC";
-        $result = $db->lanzarSQL($sql);
-
-        $diccionario = [];
-        while ($fila = mysqli_fetch_assoc($result)) {
-            $diccionario[] = $fila;
-        }
-
-        $db->cerrarConexion();
-        return $diccionario;
-    }
-
-    public function obtenerDiccionarioPorRama($ramaId, $busqueda = '') {
-        $db = new AccesoBD();
-        $conn = $db->conexion;
-
-        $sql = "SELECT id, rama, cast, eusk1, eusk2, eusk3, definicion
-                FROM diccionario
                 WHERE rama = ?";
         if (!empty($busqueda)) {
             $sql .= " AND cast LIKE ?";
@@ -100,13 +78,13 @@ class AccesoBD_Usuario {
         $stmt->execute();
         $result = $stmt->get_result();
 
-        $diccionario = [];
+        $glosario = [];
         while ($fila = $result->fetch_assoc()) {
-            $diccionario[] = $fila;
+            $glosario[] = $fila;
         }
 
         $db->cerrarConexion();
-        return $diccionario;
+        return $glosario;
     }
 
     public function obtenerTodasLasRamas() {
@@ -156,7 +134,7 @@ class AccesoBD_Usuario {
     $partida = $stmt->get_result()->fetch_assoc();
 
     if (!$partida) {
-        $sqlInsert = "INSERT INTO partidas (semana, fechaJugada) VALUES (?, NOW())";
+        $sqlInsert = "INSERT INTO partidas (semana, fechaInicio) VALUES (?, NOW())";
         $stmt2 = $conn->prepare($sqlInsert);
         $stmt2->bind_param("i", $semanaActual);
         $stmt2->execute();
@@ -204,49 +182,6 @@ class AccesoBD_Usuario {
         $db->cerrarConexion();
         return $preguntas;
     }
-
-public function actualizarPuntuacionClase($usuarioId, $puntuacionFinal) {
-    $db = new AccesoBD();
-    $conn = $db->conexion;
-
-    $sqlSector = "SELECT sector FROM user WHERE id = ?";
-    $stmt = $conn->prepare($sqlSector);
-    $stmt->bind_param("i", $usuarioId);
-    $stmt->execute();
-    $res = $stmt->get_result()->fetch_assoc();
-    $sectorId = $res['sector'];
-
-    if (!$sectorId) {
-        $db->cerrarConexion();
-        return;
-    }
-
-    $sqlUpdateSector = "UPDATE sectores
-                        SET puntuacionTotal = puntuacionTotal + ?
-                        WHERE id = ?";
-    $stmt2 = $conn->prepare($sqlUpdateSector);
-    $stmt2->bind_param("ii", $puntuacionFinal, $sectorId);
-    $stmt2->execute();
-
-    $sqlRama = "SELECT rama FROM sectores WHERE id = ?";
-    $stmt3 = $conn->prepare($sqlRama);
-    $stmt3->bind_param("i", $sectorId);
-    $stmt3->execute();
-    $resRama = $stmt3->get_result()->fetch_assoc();
-    $ramaId = $resRama['rama'];
-
-    if ($ramaId) {
-        $sqlUpdateRama = "UPDATE ramas
-                          SET puntuacionRamas = puntuacionRamas + ?
-                          WHERE id = ?";
-        $stmt4 = $conn->prepare($sqlUpdateRama);
-        $stmt4->bind_param("ii", $puntuacionFinal, $ramaId);
-        $stmt4->execute();
-    }
-
-    $db->cerrarConexion();
-}
-
 
     public function obtenerPartidaSemanaActual() {
         $db = new AccesoBD();

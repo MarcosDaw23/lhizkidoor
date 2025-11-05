@@ -2,7 +2,7 @@
   <h2>Iniciar Sesión</h2>
   <p class="subtitle">Bienvenido de nuevo a LHizki</p>
 
-  <form action="/lhizkidoor-juan/auth/controllers/login_controller.php" method="post">
+  <form action="/lhizkidoor/auth/controllers/login_controller.php" method="post">
     <!-- Campo Email -->
     <div class="form-group">
       <label for="email">

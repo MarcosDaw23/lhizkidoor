@@ -1,127 +1,161 @@
 <?php
-spl_autoload_register(function ($class) {
-    $path = __DIR__ . "/model/{$class}.class.php";
-    if (file_exists($path)) {
-        require_once $path;
-    }
-});
-//los index son todos los de mikel
-session_start();
+
 if (!isset($_SESSION['user'])) {
-    header("Location: /lhizkidoor-juan/auth/index.php?section=login");
+    header("Location: /lhizkidoor/auth/index.php?section=login");
     exit;
 }
 
-$usuario = $_SESSION['user'];
+require_once __DIR__ . '/../models/AccesoBD_class.php';
+
+$usuarioSesion = $_SESSION['user'];
+$id = intval($usuarioSesion['id']);
+
+$db = new AccesoBD_Admin();
+$usuario = $db->obtenerUsuarioPorId($id);
+$centros = $db->obtenerCentros();
+$sectores = $db->obtenerSectores();
+$clases = $db->obtenerClases();
+
+if (!$usuario) {
+    echo "<div class='alert alert-danger text-center mt-5'>Usuario no encontrado.</div>";
+    exit;
+}
+
+// Obtener la imagen de perfil o usar una por defecto
+$imagenPerfil = !empty($usuario['imagen_perfil']) ? $usuario['imagen_perfil'] : null;
 ?>
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LHizki - Panel de Administración</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/estilo.css?v=2.0">
-    
-  </head>
+<div class="perfil-container">
+  <!-- Mensaje de éxito -->
+  <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      Perfil actualizado correctamente
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <?php endif; ?>
 
-  <body>
-    <div class="admin-layout">
-      <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-          <img src="../auth/img/LHizki_Logo.png" alt="LHizki Logo" class="sidebar-logo">
-          <a href="./index.php" class="sidebar-brand">LHizki</a>
+  <!-- Header simple del perfil -->
+  <div class="perfil-header-simple">
+    <h2 class="perfil-title">Mi Perfil</h2>
+  </div>
+
+  <!-- Formulario simple -->
+  <form action="./controllers/actualizarUsuarios_controller.php" method="POST" enctype="multipart/form-data" class="perfil-form-simple">
+    <input type="hidden" name="id" value="<?= $usuario['id'] ?>">
+    <input type="file" name="imagen_perfil" id="imagenPerfilInput" accept="image/*" style="display: none;">
+
+    <!-- Foto de perfil -->
+    <div class="perfil-foto-section">
+      <label class="perfil-label-simple">Foto de Perfil</label>
+      <div class="perfil-avatar-wrapper-center">
+        <div class="perfil-avatar-simple" id="avatarPreview">
+          <?php if ($imagenPerfil): ?>
+            <img src="<?= htmlspecialchars($imagenPerfil) ?>" alt="Avatar" class="perfil-avatar-img-simple">
+          <?php else: ?>
+            <span class="perfil-avatar-inicial"><?= strtoupper(substr($usuario['nombre'], 0, 1)) ?></span>
+          <?php endif; ?>
         </div>
-
-        <nav class="sidebar-menu">
-          <div class="menu-section-title">Principal</div>
-          <a href="./index.php" class="menu-item active">
-            <i class="bi bi-speedometer2"></i>
-            <span>Dashboard</span>
-          </a>
-
-          <div class="menu-section-title">Gestión</div>
-          <a href="./controllers/obtenerUsuarios_controller.php" class="menu-item">
-            <i class="bi bi-people"></i>
-            <span>Glosario</span>
-          </a>
-          <a href="index.php?section=crearProfesor" class="menu-item">
-            <i class="bi bi-person-plus"></i>
-            <span>Crear eventos</span>
-          </a>
-          <a href="./control/obtenerEstadisticas_controller.php" class="menu-item">
-            <i class="bi bi-bar-chart"></i>
-            <span>Estadísticas</span>
-          </a>
-        </nav>
-
-        <div class="sidebar-footer">
-          <div class="user-info-sidebar">
-            <div class="user-avatar">
-              <?php echo strtoupper(substr($usuario['nombre'], 0, 1)); ?>
-            </div>
-            <div class="user-details">
-              <div class="user-name"><?php echo htmlspecialchars($usuario['nombre']); ?></div>
-              <div class="user-role">Profesor</div>
-            </div>
-            <a href="index.php?section=perfil" class="settings-icon" title="Configuración">
-              <i class="bi bi-gear"></i>
-            </a>
-          </div>
-        </div>
-      </aside>
-
-      <div class="main-content">
-        <header class="topbar">
-          <div class="topbar-left">
-            <button class="sidebar-toggle" id="sidebarToggle">
-              <i class="bi bi-list"></i>
-            </button>
-            <h1>Panel de Administración</h1>
-          </div>
-          <div class="topbar-right">
-            <a href="/lhizkidoor-juan/auth/controllers/logout_controller.php" class="logout-btn">
-              <i class="bi bi-box-arrow-right"></i>
-              <span>Cerrar Sesión</span>
-            </a>
-          </div>
-        </header>
-
-        <!-- Área de Contenido -->
-        <main class="content-area">
-          <?php 
-            $view = "home"; 
-            if (isset($_GET['section'])) {
-              $view = $_GET['section'];
-            }
-
-            include "./sections/$view.php";
-          ?>
-        </main>
+        <label for="imagenPerfilInput" class="perfil-icon-cambiar">
+          <i class="bi bi-camera-fill"></i>
+        </label>
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    
-      document.getElementById('sidebarToggle')?.addEventListener('click', function() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('active');
-      });
-      document.addEventListener('click', function(event) {
-        const sidebar = document.getElementById('sidebar');
-        const toggle = document.getElementById('sidebarToggle');
-        
-        if (window.innerWidth <= 992 && sidebar && toggle && 
-            !sidebar.contains(event.target) && !toggle.contains(event.target)) {
-          sidebar.classList.remove('active');
-        }
-      });
-    </script>
+    <hr class="perfil-divider">
+
+    <!-- Información Personal -->
+    <div class="perfil-grupo">
+      <h3 class="perfil-subtitulo">Información Personal</h3>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="perfil-label-simple">Nombre</label>
+          <input type="text" name="nombre" class="perfil-input-simple" value="<?= htmlspecialchars($usuario['nombre']) ?>" required>
+        </div>
+        <div class="col-md-6">
+          <label class="perfil-label-simple">Apellido</label>
+          <input type="text" name="apellido" class="perfil-input-simple" value="<?= htmlspecialchars($usuario['apellido']) ?>" required>
+        </div>
+        <div class="col-md-6">
+          <label class="perfil-label-simple">Email</label>
+          <input type="email" name="mail" class="perfil-input-simple" value="<?= htmlspecialchars($usuario['mail']) ?>" required>
+        </div>
+        <div class="col-md-6">
+          <label class="perfil-label-simple">Rol</label>
+          <select name="rol" class="perfil-input-simple" disabled>
+            <option value="1" <?= $usuario['rol'] == 1 ? 'selected' : '' ?>>Administrador</option>
+            <option value="2" <?= $usuario['rol'] == 2 ? 'selected' : '' ?>>Profesor</option>
+            <option value="3" <?= $usuario['rol'] == 3 ? 'selected' : '' ?>>Usuario</option>
+          </select>
+          <input type="hidden" name="rol" value="<?= $usuario['rol'] ?>">
+        </div>
+      </div>
+    </div>
+
+    <hr class="perfil-divider">
+
+    <!-- Información Académica -->
+    <div class="perfil-grupo">
+      <h3 class="perfil-subtitulo">Información Académica</h3>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="perfil-label-simple">Centro</label>
+          <select name="centro" class="perfil-input-simple">
+            <?php foreach ($centros as $c): ?>
+              <option value="<?= $c['id'] ?>" <?= $usuario['centro'] == $c['id'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($c['nombre']) ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="perfil-label-simple">Sector</label>
+          <select name="sector" class="perfil-input-simple">
+            <?php foreach ($sectores as $s): ?>
+              <option value="<?= $s['id'] ?>" <?= $usuario['sector'] == $s['id'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($s['nombre']) ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="perfil-label-simple">Clase</label>
+          <select name="clase" class="perfil-input-simple">
+            <?php foreach ($clases as $cl): ?>
+              <option value="<?= $cl['id'] ?>" <?= $usuario['clase'] == $cl['id'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($cl['nombre']) ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="perfil-botones">
+      <button type="submit" class="perfil-btn-guardar">
+        Guardar Cambios
+      </button>
+      <a href="index.php?section=home" class="perfil-btn-cancelar">
+        Cancelar
+      </a>
+    </div>
+  </form>
+</div>
+
+<script>
+// Preview de imagen de perfil
+document.getElementById('imagenPerfilInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const preview = document.getElementById('avatarPreview');
+      preview.innerHTML = '<img src="' + e.target.result + '" alt="Avatar" class="perfil-avatar-img-simple">';
+    }
+    reader.readAsDataURL(file);
+  }
+});
+</script>
   </body>
 </html>

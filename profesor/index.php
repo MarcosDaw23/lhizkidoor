@@ -8,7 +8,7 @@ spl_autoload_register(function ($class) {
 //los index son todos los de mikel
 session_start();
 if (!isset($_SESSION['user'])) {
-    header("Location: /lhizkidoor-juan/auth/index.php?section=login");
+    header("Location: /lhizkidoor/auth/index.php?section=login");
     exit;
 }
 
@@ -69,7 +69,7 @@ $usuario = $_SESSION['user'];
               <div class="user-name"><?php echo htmlspecialchars($usuario['nombre']); ?></div>
               <div class="user-role">Profesor</div>
             </div>
-            <a href="/lhizkidoor-juan/profesor/index.php?section=perfil" class="settings-icon" title="Configuración">
+            <a href="/lhizkidoor/profesor/index.php?section=perfil" class="settings-icon" title="Configuración">
               <i class="bi bi-gear"></i>
             </a>
           </div>
@@ -84,7 +84,7 @@ $usuario = $_SESSION['user'];
             <h1>Panel de Administración</h1>
           </div>
           <div class="topbar-right">
-            <a href="/lhizkidoor-juan/auth/controllers/logout_controller.php" class="logout-btn">
+            <a href="/lhizkidoor/auth/controllers/logout_controller.php" class="logout-btn">
               <i class="bi bi-box-arrow-right"></i>
               <span>Cerrar Sesión</span>
             </a>
