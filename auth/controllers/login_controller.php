@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'centro' => $resultado['centro'],
             'clase' => $resultado['clase'],
             'sector' => $resultado['sector'],
-            'rol' => $resultado['rol']
+            'rol' => $resultado['rol'],
+            'puntuacion' => $resultado['puntuacionIndividual']
         ];
         // ✅ Comprobamos si ya jugó esta semana
         $bdUsuario = new AccesoBD_Usuario();
