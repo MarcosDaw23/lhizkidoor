@@ -303,5 +303,28 @@ public function obtenerPreguntasPorRamaUsuario($usuarioId) {
     return $preguntas;
 }
 
+public function obtenerEventoPorId($eventoId) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+    $stmt = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
+    $stmt->bind_param("i", $eventoId);
+    $stmt->execute();
+    $res = $stmt->get_result()->fetch_assoc();
+    $db->cerrarConexion();
+    return $res;
+}
+
+public function obtenerPreguntasEvento($cantidad) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+    $sql = "SELECT * FROM diccionario ORDER BY RAND() LIMIT ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $cantidad);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $db->cerrarConexion();
+    return $result;
+}
+
 }
 ?>
