@@ -38,8 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'centro' => $resultado['centro'],
             'clase' => $resultado['clase'],
             'sector' => $resultado['sector'],
-            'rol' => $resultado['rol'],
-            'puntuacion' => $resultado['puntuacionIndividual']
+            'rol' => $resultado['rol']
         ];
         // ✅ Comprobamos si ya jugó esta semana
         $bdUsuario = new AccesoBD_Usuario();
@@ -74,4 +73,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "Tch, pa tras maleante";
 }
-?>

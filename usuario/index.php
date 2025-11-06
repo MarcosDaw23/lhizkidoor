@@ -7,12 +7,8 @@ spl_autoload_register(function ($class) {
 });
 
 session_start();
-if (isset($_SESSION['semana_jugada']) && $_SESSION['semana_jugada'] != date('W')) {
-    $_SESSION['yaJugo'] = false;
-    $_SESSION['semana_jugada'] = date('W'); // actualiza la semana actual, pero solo del usuarfio, tengo que añadir la semana de la bd pa que sea automatizado
-}
 if (!isset($_SESSION['user'])) {
-        header("Location: ../auth/index.php?section=login");
+    header("Location: ../auth/index.php?section=login");
     exit;
 }
 
@@ -39,17 +35,48 @@ $currentPage = $_GET['section'] ?? 'home';
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 20%, #764ba2 60%);
             min-height: 100vh;
-            padding-bottom: 80px; /* Espacio para la barra inferior móvil */
+            padding-bottom: 100px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 107, 107, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(250, 139, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.03) 2px, rgba(255, 255, 255, 0.03) 4px);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Navbar Desktop */
         .navbar-desktop {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            padding: 15px 0;
+            background: rgba(15, 15, 35, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            padding: 20px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -62,21 +89,36 @@ $currentPage = $_GET['section'] ?? 'home';
         }
 
         .navbar-brand {
-            font-weight: 800;
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-weight: 900;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #ff6b6b 0%, #4facfe 50%, #00f2fe 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            position: relative;
+            filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.4));
+        }
+
+        .navbar-brand i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ff6b6b 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .navbar-menu {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
             list-style: none;
             margin: 0;
@@ -85,71 +127,118 @@ $currentPage = $_GET['section'] ?? 'home';
         .nav-link-custom {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 10px;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 12px;
             text-decoration: none;
-            color: #333;
+            color: rgba(255, 255, 255, 0.7);
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(79, 172, 254, 0.2) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .nav-link-custom:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-link-custom:hover::before {
+            opacity: 1;
         }
 
         .nav-link-custom.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #4facfe 100%);
             color: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .nav-link-custom i {
+            font-size: 1.2rem;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 8px 16px;
-            background: rgba(102, 126, 234, 0.1);
+            gap: 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 50px;
+            backdrop-filter: blur(10px);
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #4facfe 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 700;
             font-size: 1.1rem;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .user-name {
             font-weight: 600;
-            color: #333;
+            color: white;
+            font-size: 0.95rem;
         }
 
         /* Botón de logout */
         .btn-logout {
             padding: 10px 20px;
-            background: rgba(220, 53, 69, 0.1);
-            color: #dc3545;
-            border: none;
-            border-radius: 10px;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+            border-radius: 12px;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-logout::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            transition: left 0.3s ease;
+            z-index: -1;
         }
 
         .btn-logout:hover {
-            background: #dc3545;
             color: white;
+            border-color: transparent;
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+        }
+
+        .btn-logout:hover::before {
+            left: 0;
         }
 
         /* Barra de navegación inferior móvil */
@@ -159,10 +248,11 @@ $currentPage = $_GET['section'] ?? 'home';
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
-            padding: 12px 0;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+            padding: 15px 0;
             z-index: 1000;
         }
 
@@ -172,19 +262,21 @@ $currentPage = $_GET['section'] ?? 'home';
             align-items: center;
             max-width: 600px;
             margin: 0 auto;
+            padding: 0 10px;
         }
 
         .mobile-nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            padding: 8px 16px;
+            gap: 6px;
+            padding: 8px 12px;
             text-decoration: none;
-            color: #666;
+            color: rgba(255, 255, 255, 0.6);
             transition: all 0.3s ease;
             border-radius: 12px;
-            min-width: 70px;
+            min-width: 60px;
+            position: relative;
         }
 
         .mobile-nav-item i {
@@ -193,43 +285,72 @@ $currentPage = $_GET['section'] ?? 'home';
         }
 
         .mobile-nav-item span {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
         }
 
         .mobile-nav-item.active {
-            color: #667eea;
+            color: white;
+        }
+
+        .mobile-nav-item.active::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b 0%, #4facfe 100%);
+            border-radius: 3px 3px 0 0;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
         }
 
         .mobile-nav-item.active i {
-            transform: scale(1.2);
+            transform: scale(1.15);
+            color: #4facfe;
         }
 
         .mobile-nav-item:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            color: white;
         }
 
         /* Contenedor principal */
         .main-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 40px 30px;
+            position: relative;
+            z-index: 1;
         }
 
         /* Alertas */
         .alert {
             position: fixed;
-            top: 20px;
+            top: 100px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            max-width: 600px;
+            max-width: 500px;
             z-index: 2000;
             text-align: center;
-            font-size: 1rem;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            font-size: 0.95rem;
+            padding: 16px 24px;
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
         }
 
         /* Responsive */
@@ -243,11 +364,11 @@ $currentPage = $_GET['section'] ?? 'home';
             }
 
             body {
-                padding-bottom: 80px;
+                padding-bottom: 110px;
             }
 
             .main-container {
-                padding: 20px 15px;
+                padding: 30px 20px;
             }
         }
 
@@ -290,7 +411,7 @@ $currentPage = $_GET['section'] ?? 'home';
                     </a>
                 </li>
                 <li>
-                    <a href="./sections/rankings.php" class="nav-link-custom">
+                    <a href="./index.php?section=rankings" class="nav-link-custom">
                         <i class="bi bi-trophy-fill"></i>
                         <span>Rankings</span>
                     </a>

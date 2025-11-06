@@ -7,59 +7,94 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
 
 <style>
     .hero-section {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 25px;
-        padding: 60px 40px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        padding: 80px 50px;
         text-align: center;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-        margin-bottom: 40px;
-        animation: fadeInUp 0.8s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        margin-bottom: 50px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInScale 0.8s ease;
     }
 
-    @keyframes fadeInUp {
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeInScale {
         from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: scale(0.95);
         }
         to {
             opacity: 1;
-            transform: translateY(0);
+            transform: scale(1);
         }
     }
 
     .hero-greeting {
-        font-size: 2.5rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-size: 3.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ff6b6b 0%, #4facfe 50%, #00f2fe 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+        animation: textGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes textGlow {
+        0%, 100% {
+            filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.5));
+        }
+        50% {
+            filter: drop-shadow(0 0 20px rgba(79, 172, 254, 0.8));
+        }
     }
 
     .hero-subtitle {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         color: #666;
-        margin-bottom: 40px;
+        margin-bottom: 50px;
         font-weight: 500;
+        position: relative;
+        z-index: 1;
+        line-height: 1.8;
     }
 
     .play-button {
         display: inline-flex;
         align-items: center;
         gap: 15px;
-        padding: 25px 50px;
-        font-size: 1.3rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 30px 60px;
+        font-size: 1.4rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ff6b6b 0%, #4facfe 100%);
         color: white;
         border: none;
-        border-radius: 20px;
+        border-radius: 25px;
         text-decoration: none;
-        transition: all 0.4s ease;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 15px 50px rgba(255, 107, 107, 0.4);
         position: relative;
+        z-index: 1;
         overflow: hidden;
     }
 
@@ -71,33 +106,36 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
         width: 0;
         height: 0;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.2);
         transform: translate(-50%, -50%);
         transition: width 0.6s, height 0.6s;
     }
 
     .play-button:hover::before {
-        width: 300px;
-        height: 300px;
+        width: 400px;
+        height: 400px;
     }
 
     .play-button:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        transform: translateY(-8px) scale(1.05);
+        box-shadow: 0 20px 60px rgba(255, 107, 107, 0.6);
         color: white;
     }
 
     .play-button i {
-        font-size: 2rem;
-        animation: pulse 2s infinite;
+        font-size: 2.5rem;
+        animation: bounce 2s infinite;
     }
 
-    @keyframes pulse {
-        0%, 100% {
-            transform: scale(1);
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
         }
-        50% {
-            transform: scale(1.1);
+        40% {
+            transform: translateY(-10px);
+        }
+        60% {
+            transform: translateY(-5px);
         }
     }
 
@@ -105,130 +143,186 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        padding: 18px 40px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        background: white;
-        color: #667eea;
-        border: 2px solid #667eea;
-        border-radius: 15px;
+        padding: 22px 45px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.05);
+        color: #666;
+        border: 2px solid rgba(79, 172, 254, 0.5);
+        border-radius: 20px;
         text-decoration: none;
         transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
     }
 
     .secondary-button:hover {
-        background: #667eea;
-        color: white;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        background: rgba(79, 172, 254, 0.2);
+        border-color: #4facfe;
+        color: #666;
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(79, 172, 254, 0.4);
     }
 
     .status-badge {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 12px 24px;
+        gap: 10px;
+        padding: 15px 30px;
         border-radius: 50px;
-        font-weight: 600;
+        font-weight: 700;
         margin-bottom: 30px;
-        font-size: 1rem;
+        font-size: 1.1rem;
+        position: relative;
+        z-index: 1;
+        animation: pulse 2s ease-in-out infinite;
     }
 
     .status-badge.success {
-        background: rgba(40, 167, 69, 0.15);
-        color: #28a745;
+        background: rgba(46, 213, 115, 0.15);
+        color: #2ed573;
+        border: 1px solid rgba(46, 213, 115, 0.3);
+        box-shadow: 0 0 30px rgba(46, 213, 115, 0.3);
     }
 
     .status-badge.warning {
-        background: rgba(255, 193, 7, 0.15);
-        color: #ffc107;
+        background: rgba(255, 192, 57, 0.15);
+        color: #ffc039;
+        border: 1px solid rgba(255, 192, 57, 0.3);
+        box-shadow: 0 0 30px rgba(255, 192, 57, 0.3);
     }
 
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin-top: 40px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
     }
 
     .stat-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        padding: 30px;
-        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 40px 30px;
+        border-radius: 25px;
         text-align: center;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        animation: fadeIn 1s ease;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeInUp 1s ease;
+        position: relative;
+        overflow: hidden;
     }
 
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(79, 172, 254, 0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
     .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 107, 107, 0.5);
+    }
+
+    .stat-card:hover::before {
+        opacity: 1;
     }
 
     .stat-icon {
-        width: 70px;
-        height: 70px;
-        margin: 0 auto 20px;
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 25px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 2rem;
+        font-size: 2.5rem;
+        position: relative;
+        z-index: 1;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
     }
 
     .stat-card:nth-child(1) .stat-icon {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
         color: white;
+        box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
     }
 
     .stat-card:nth-child(2) .stat-icon {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         color: white;
+        box-shadow: 0 15px 40px rgba(79, 172, 254, 0.4);
     }
 
     .stat-card:nth-child(3) .stat-icon {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        background: linear-gradient(135deg, #ffc039 0%, #ff6348 100%);
         color: white;
+        box-shadow: 0 15px 40px rgba(255, 192, 57, 0.4);
     }
 
     .stat-title {
-        font-size: 0.95rem;
-        color: #666;
+        font-size: 1rem;
+        color:#666;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 600;
-        margin-bottom: 10px;
+        letter-spacing: 2px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
     }
 
     .stat-value {
-        font-size: 2rem;
-        font-weight: 800;
-        color: #333;
+        font-size: 3rem;
+        font-weight: 900;
+        color: #666;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
     }
 
     @media (max-width: 768px) {
         .hero-section {
-            padding: 40px 25px;
+            padding: 50px 30px;
         }
 
         .hero-greeting {
-            font-size: 2rem;
+            font-size: 2.5rem;
         }
 
         .hero-subtitle {
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
 
         .play-button {
-            padding: 20px 35px;
-            font-size: 1.1rem;
+            padding: 25px 40px;
+            font-size: 1.2rem;
         }
 
         .stats-grid {
@@ -249,7 +343,7 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
         </div>
         
         <p class="hero-subtitle">
-            Pon a prueba tus conocimientos de euskera técnico.<br>
+            Pon a prueba tus conocimientos de euskera técnico<br>
             ¡Demuestra lo que sabes y escala en el ranking!
         </p>
 
@@ -264,8 +358,8 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
         </div>
         
         <p class="hero-subtitle">
-            ¡Excelente trabajo! Ya jugaste esta semana.<br>
-            Puedes repasar o explorar otras secciones.
+            ¡Excelente trabajo! Ya jugaste esta semana<br>
+            Puedes repasar o explorar otras secciones
         </p>
 
         <a href="./controllers/PartidaSemanal_controller.php?action=repasar" class="secondary-button">
@@ -285,4 +379,3 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
         <div class="stat-value"><?= $_SESSION['user']['puntuacionIndividual'] ?? 0 ?></div>
     </div>
 </div>
-

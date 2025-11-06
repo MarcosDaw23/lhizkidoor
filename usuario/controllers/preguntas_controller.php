@@ -3,7 +3,7 @@ require_once __DIR__ . '/../models/AccesoBD_class.php';
 session_start();
 
 if (!isset($_SESSION['user'])) {
-    header("Location: /1semestre/lhizkidoor/auth/index.php?section=login");
+    header("Location: ../../auth/index.php?section=login");
     exit;
 }
 

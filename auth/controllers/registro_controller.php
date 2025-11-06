@@ -44,7 +44,7 @@ $bd = new AccesoBD_Auth();
 $token = $bd->registrarUsuario($user);
 
 if ($token) {
-    $link = "http://localhost/lhizkidoor/auth/index.php?section=confirmarCuenta&token=$token";
+    $link = "http://localhost/lhizkidoor-aritz/auth/index.php?section=confirmarCuenta&token=$token";
 
     $mailer = new PHPMailer(true);
 
@@ -74,7 +74,7 @@ if ($token) {
 
         $_SESSION['mensaje'] = "Tu cuenta ha sido creada, pero falta confirmarla, revisa tu correo gmail";
         $_SESSION['tipo_mensaje'] = "success";
-        header("Location: ../index.php?section=confirmarCuenta");
+        header("Location: ../index.php?section=login");
         exit;
 
     } catch (Exception $e) {

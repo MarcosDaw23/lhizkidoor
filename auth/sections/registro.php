@@ -25,7 +25,7 @@
         <select name="centro" id="centro" class="form-control" required>
           <option value="">Selecciona un centro</option>
           <?php
-          require_once './models/AccesoBD_class.php';
+          require_once __DIR__ . '/../../core/Database.php';
           $bd = new AccesoBD();
           $sql = "SELECT id, nombre FROM centro ORDER BY nombre";
           $resultado = $bd->lanzarSQL($sql);

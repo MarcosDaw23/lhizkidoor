@@ -179,9 +179,9 @@ if (isset($_GET['token'])) {
       <span>Ir al login</span>
     </a>
   <?php else: ?>
-    <a href="https://mail.google.com" class="btn-secondary-confirm">
-      <i class="bi bi-envelope-exclamation-fill"></i>
-      <span>Confirmar correo</span>
+    <a href="index.php?section=registro" class="btn-secondary-confirm">
+      <i class="bi bi-arrow-left"></i>
+      <span>Volver al registro</span>
     </a>
   <?php endif; ?>
 </div>
