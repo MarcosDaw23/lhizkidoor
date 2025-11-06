@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/../../core/database.php';
+require_once __DIR__ . '/../../core/Modelos/Palabra_class.php';
 
-class AccesoBD_Admin {
+class AccesoBD_Profesor {
 
     public function obtenerUsuarios($nombre = '', $centro = '', $sector = '', $clase = '', $rol = '', $ordenFecha = 'DESC') {
         $db = new AccesoBD();
@@ -105,12 +106,38 @@ class AccesoBD_Admin {
         return $res;
     }
 
+    public function insertarNuevaPalabra($rama, $cast, $eusk, $definicion) {
+        $db = new AccesoBD();
+
+        $sql = "INSERT INTO glosario (rama, cast, eusk, definicion) 
+        VALUES ('$rama', '$cast', '$eusk', '$definicion')";
+
+        $res = $db->lanzarSQL($sql);
+        $db->cerrarConexion();
+
+        return $res;
+    }
+
     public function borrarUsuario($id) {
         $db = new AccesoBD();
         $sql = "DELETE FROM user WHERE id = " . intval($id);
         $res = $db->lanzarSQL($sql);
         $db->cerrarConexion();
         return $res;
+    }
+
+    public function obtenerTodasLasRamas() {
+        $db = new AccesoBD();
+        $sql = "SELECT id, nombre FROM ramas ORDER BY nombre ASC";
+        $result = $db->lanzarSQL($sql);
+
+        $ramas = [];
+        while ($fila = mysqli_fetch_assoc($result)) {
+            $ramas[] = $fila;
+        }
+
+        $db->cerrarConexion();
+        return $ramas;
     }
 
     public function registrarProfesor(User $user) {

@@ -15,7 +15,7 @@ if (isset($_POST['agregar_glosario'])) {
 
     if ($rama && $cast && $eusk && $definicion) {
         $db = new AccesoBD_Profesor();
-        $resultado = $db->insertarPalabraGlosario($rama, $cast, $eusk, $definicion);
+        $resultado = $db->insertarNuevaPalabra($rama, $cast, $eusk, $definicion);
 
         if ($resultado) {
             $_SESSION['mensaje'] = "Palabra añadida correctamente al glosario.";

@@ -46,17 +46,17 @@ $usuario = $_SESSION['user'];
           </a>
 
           <div class="menu-section-title">Gestión</div>
-          <a href="./controllers/obtenerUsuarios_controller.php" class="menu-item">
-            <i class="bi bi-people"></i>
+          <a href="controllers/obtenerGlosario_controller.php" class="menu-item">
+            <i class="bi bi-book-half"></i>
             <span>Glosario</span>
           </a>
-          <a href="index.php?section=crearProfesor" class="menu-item">
-            <i class="bi bi-person-plus"></i>
+          <a href="index.php?section=crearEventos" class="menu-item">
+            <i class="bi bi-joystick"></i>
             <span>Crear eventos</span>
           </a>
-          <a href="./control/obtenerEstadisticas_controller.php" class="menu-item">
+          <a href="index.php?section=rankings" class="menu-item">
             <i class="bi bi-bar-chart"></i>
-            <span>Estadísticas</span>
+            <span>Ranking</span>
           </a>
         </nav>
 
@@ -81,7 +81,7 @@ $usuario = $_SESSION['user'];
             <button class="sidebar-toggle" id="sidebarToggle">
               <i class="bi bi-list"></i>
             </button>
-            <h1>Panel de Administración</h1>
+            <h1>Panel del Profesorado</h1>
           </div>
           <div class="topbar-right">
             <a href="/lhizkidoor/auth/controllers/logout_controller.php" class="logout-btn">
