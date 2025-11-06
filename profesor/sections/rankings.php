@@ -1,12 +1,10 @@
 <?php
-
 if (!isset($_SESSION['user'])) {
     header('Location: ../../auth/index.php?section=login');
     exit;
 }
 
 require_once(__DIR__ . '/../../usuario/models/AccesoBD_class.php');
-
 $bd = new AccesoBD_Usuario();
 
 $centroId = $_SESSION['user']['centro'];
@@ -40,6 +38,21 @@ if (is_array($centroData)) {
             min-height: 100vh;
             padding: 20px;
             padding-bottom: 100px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.3) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Navbar Desktop */
@@ -50,6 +63,8 @@ if (is_array($centroData)) {
             border-radius: 15px;
             margin-bottom: 30px;
             padding: 15px 25px;
+            position: relative;
+            z-index: 10;
         }
 
         .navbar-desktop .container-fluid {
@@ -60,20 +75,20 @@ if (is_array($centroData)) {
 
         .navbar-brand {
             font-weight: 800;
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 2rem;
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .navbar-menu {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             align-items: center;
             list-style: none;
             margin: 0;
@@ -82,9 +97,9 @@ if (is_array($centroData)) {
         .nav-link-custom {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 10px;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 15px;
             text-decoration: none;
             color: #333;
             font-weight: 600;
@@ -92,13 +107,15 @@ if (is_array($centroData)) {
         }
 
         .nav-link-custom:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: rgba(250, 139, 255, 0.15);
+            color: #FA8BFF;
+            transform: translateY(-2px);
         }
 
         .nav-link-custom.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
             color: white;
+            box-shadow: 0 6px 20px rgba(250, 139, 255, 0.4);
         }
 
         /* Barra de navegación inferior móvil */
@@ -127,41 +144,45 @@ if (is_array($centroData)) {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            padding: 8px 16px;
+            gap: 6px;
+            padding: 10px 18px;
             text-decoration: none;
             color: #666;
             transition: all 0.3s ease;
-            border-radius: 12px;
+            border-radius: 15px;
             min-width: 70px;
         }
 
         .mobile-nav-item i {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             transition: all 0.3s ease;
         }
 
         .mobile-nav-item span {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 600;
         }
 
         .mobile-nav-item.active {
-            color: #667eea;
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(250, 139, 255, 0.3);
         }
 
         .mobile-nav-item.active i {
-            transform: scale(1.2);
+            transform: scale(1.15);
         }
 
         .mobile-nav-item:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: rgba(250, 139, 255, 0.15);
+            color: #FA8BFF;
         }
 
         .ranking-container {
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .ranking-header {
@@ -177,7 +198,7 @@ if (is_array($centroData)) {
         .ranking-header h1 {
             font-size: 2.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -194,7 +215,7 @@ if (is_array($centroData)) {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
             color: white;
             padding: 10px 20px;
             border-radius: 50px;
@@ -232,10 +253,10 @@ if (is_array($centroData)) {
         }
 
         .category-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
             color: white;
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 30px rgba(250, 139, 255, 0.4);
         }
 
         .category-btn i {
@@ -269,7 +290,7 @@ if (is_array($centroData)) {
         }
 
         .ranking-table thead th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
             color: white;
             padding: 15px 20px;
             text-align: left;
@@ -352,7 +373,7 @@ if (is_array($centroData)) {
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
             color: white;
             padding: 8px 16px;
             border-radius: 50px;
@@ -370,8 +391,8 @@ if (is_array($centroData)) {
         .spinner {
             width: 50px;
             height: 50px;
-            border: 4px solid rgba(102, 126, 234, 0.2);
-            border-top-color: #667eea;
+            border: 4px solid rgba(250, 139, 255, 0.2);
+            border-top-color: #FA8BFF;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -447,7 +468,7 @@ if (is_array($centroData)) {
         }
     </style>
 </head>
-
+<body>
     <div class="ranking-container">
         <!-- Header -->
         <div class="ranking-header">
@@ -526,7 +547,7 @@ if (is_array($centroData)) {
 
             // Hacer petición AJAX
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'ranking_ajax.php?categoria=' + categoria, true);
+            xhr.open('GET', './sections/ranking_ajax.php?categoria=' + categoria, true);
             xhr.onload = function() {
                 if (this.status === 200) {
                     document.getElementById('ranking-table').innerHTML = this.responseText;
@@ -552,3 +573,5 @@ if (is_array($centroData)) {
             xhr.send();
         }
     </script>
+</body>
+</html>
