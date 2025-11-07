@@ -58,6 +58,10 @@ $usuario = $_SESSION['user'];
             <i class="bi bi-bar-chart"></i>
             <span>Ranking</span>
           </a>
+          <a href="./controllers/Estadisticas_controller.php" class="menu-item">
+            <i class="bi bi-bar-chart"></i>
+            <span>Estadisticas</span>
+          </a>
         </nav>
 
         <div class="sidebar-footer">

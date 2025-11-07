@@ -173,5 +173,122 @@ class AccesoBD_Profesor {
         return $resultado ? true : false;
     }
 
+    public function obtenerEstadisticasPartidas() {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "
+        SELECT 
+            u.id AS user_id,
+            CONCAT(u.nombre, ' ', u.apellido) AS jugador,
+            COUNT(pu.id) AS partidas_jugadas,
+            SUM(pu.puntuacion) AS total_puntos,
+            AVG(pu.puntuacion) AS promedio_puntos,
+            MAX(pu.fechaJugada) AS ultima_partida
+        FROM partida_user pu
+        INNER JOIN user u ON pu.user_id = u.id
+        GROUP BY u.id
+        ORDER BY total_puntos DESC
+    ";
+
+    $result = $conn->query($sql);
+    $estadisticas = [];
+
+    while ($fila = $result->fetch_assoc()) {
+        $estadisticas[] = $fila;
+    }
+
+    $db->cerrarConexion();
+    return $estadisticas;
+}
+
+    public function crearEvento($nombre, $profesor_id, $num_preguntas, $clases) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "INSERT INTO eventos (user, nombre, num_preguntas, fechaInicio, fechaFin, fechaCreacion)
+            VALUES (?, ?, ?, NOW(), NULL, NOW())";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("isi", $profesor_id, $nombre, $num_preguntas);
+    $ok = $stmt->execute();
+
+    if (!$ok) return false;
+    $evento_id = $conn->insert_id;
+
+    // Guardar destinatarios (clases)
+    $sql_rel = "INSERT INTO evento_destinatarios (evento_id, clase_id) VALUES (?, ?)";
+    $stmt_rel = $conn->prepare($sql_rel);
+
+    foreach ($clases as $clase_id) {
+        $sector_id = null;
+        $stmt_rel->bind_param("ii", $evento_id, $clase_id);
+        $stmt_rel->execute();
+    }
+
+    $db->cerrarConexion();
+    return $evento_id;
+}
+
+    public function obtenerCorreosUsuariosEvento($clases) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $condiciones = [];
+    if (!empty($clases)) {
+        $claseIn = implode(",", array_map('intval', $clases));
+        $condiciones[] = "clase IN ($claseIn)";
+    }
+
+    $where = $condiciones ? "WHERE " . implode(" OR ", $condiciones) : "";
+    $sql = "SELECT mail FROM user $where";
+    $result = $conn->query($sql);
+
+    $correos = [];
+    while ($row = $result->fetch_assoc()) {
+        $correos[] = $row;
+    }
+
+    $db->cerrarConexion();
+    return $correos;
+}
+
+    public function obtenerUsuariosEvento($clases = []) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    // Si no hay filtros, devolver array vacío
+    if (empty($clases)) {
+        return [];
+    }
+
+    // Crear condiciones dinámicas
+    $condiciones = [];
+    if (!empty($clases)) {
+        // Escapar cada valor para evitar inyecciones
+        $claseIds = implode(',', array_map('intval', $clases));
+        $condiciones[] = "clase IN ($claseIds)";
+    }
+
+    // Combinar las condiciones con OR (solo uno de los dos filtros estará activo)
+    $where = implode(' OR ', $condiciones);
+
+    // Consulta final
+    $sql = "SELECT id, nombre, apellido, mail 
+            FROM user 
+            WHERE rol = 3 AND ($where)"; // rol=3 → alumnos
+
+    $result = $conn->query($sql);
+
+    $usuarios = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $usuarios[] = $row;
+        }
+    }
+
+    $db->cerrarConexion();
+    return $usuarios;
+}
+
 }
 ?>

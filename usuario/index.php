@@ -5,8 +5,8 @@ spl_autoload_register(function ($class) {
         require_once $path;
     }
 });
-
 session_start();
+
 if (!isset($_SESSION['user'])) {
     header("Location: ../auth/index.php?section=login");
     exit;
@@ -500,5 +500,6 @@ $currentPage = $_GET['section'] ?? 'home';
             }
         }, 3000);
     </script>
+    
 </body>
 </html>
