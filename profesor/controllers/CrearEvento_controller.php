@@ -16,6 +16,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['rol'] != 2) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombreEvento = trim($_POST['nombre'] ?? '');
     $num_preguntas = intval($_POST['num_preguntas'] ?? 10);
+    $clases = $_POST['clases'] ?? [];
 
     if ($nombreEvento && $clases) {
         $profesor_id = $_SESSION['user']['id'];
