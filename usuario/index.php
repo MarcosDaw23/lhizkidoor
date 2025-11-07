@@ -474,11 +474,11 @@ $currentPage = $_GET['section'] ?? 'home';
                 <i class="bi bi-controller"></i>
                 <span>Juegos</span>
             </a>
-            <a href="./sections/rankings.php" class="mobile-nav-item">
+            <a href="./index.php?section=rankings" class="mobile-nav-item  <?= $currentPage === 'rankings' ? 'active' : '' ?>">
                 <i class="bi bi-trophy-fill"></i>
                 <span>Ranking</span>
             </a>
-            <a href="./controllers/obtenerGlosario_controller.php" class="mobile-nav-item">
+            <a href="./controllers/obtenerGlosario_controller.php" class="mobile-nav-item  <?= $currentPage === 'verGlosario' ? 'active' : '' ?>">
                 <i class="bi bi-journal-text"></i>
                 <span>Glosario</span>
             </a>

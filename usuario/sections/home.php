@@ -376,6 +376,6 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
             <i class="bi bi-star-fill"></i>
         </div>
         <div class="stat-title">Tu Puntuación</div>
-        <div class="stat-value"><?= $_SESSION['user']['puntuacionIndividual'] ?? 0 ?></div>
+        <div class="stat-value"><?= $_SESSION['user']['puntuacion'] ?? 0 ?></div>
     </div>
 </div>

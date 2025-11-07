@@ -37,7 +37,7 @@ class Config
     public static function init(): void
     {
         // Detecta el dominio actual y construye la ruta base completa
-        self::$BASE_URL = 'http://' . $_SERVER['HTTP_HOST'] . '/lhizkidoor-aritz/';
+        self::$BASE_URL = 'http://' . $_SERVER['HTTP_HOST'] . '/lhizkidoor/';
 
         /** Carpetas principales */
         self::$PATH_AUTH    = self::$BASE_URL . 'auth/';
