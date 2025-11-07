@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `centro` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla lhizki.centro: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.centro: ~0 rows (aproximadamente)
 INSERT INTO `centro` (`id`, `nombre`) VALUES
 	(1, 'san luis');
 
@@ -229,10 +229,35 @@ CREATE TABLE IF NOT EXISTS `eventos` (
   `user` int DEFAULT NULL,
   `fechaInicio` datetime DEFAULT NULL,
   `fechaFin` datetime DEFAULT NULL,
+  `nombre` varchar(100) DEFAULT NULL,
+  `num_preguntas` int DEFAULT NULL,
+  `fechaCreacion` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla lhizki.eventos: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.eventos: ~3 rows (aproximadamente)
+INSERT INTO `eventos` (`id`, `user`, `fechaInicio`, `fechaFin`, `nombre`, `num_preguntas`, `fechaCreacion`) VALUES
+	(6, 6, '2025-11-07 07:36:37', NULL, 'vsfc', 10, '2025-11-07 07:36:37'),
+	(7, 6, '2025-11-07 07:41:07', NULL, 'vfsfsfs', 11, '2025-11-07 07:41:07'),
+	(8, 6, '2025-11-07 07:42:48', NULL, 'Evento OFFICIAL 1', 10, '2025-11-07 07:42:48');
+
+-- Volcando estructura para tabla lhizki.evento_destinatarios
+CREATE TABLE IF NOT EXISTS `evento_destinatarios` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `evento_id` int NOT NULL,
+  `clase_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_evento_destinatarios_eventos` (`evento_id`),
+  KEY `FK_evento_destinatarios_clases` (`clase_id`),
+  CONSTRAINT `FK_evento_destinatarios_clases` FOREIGN KEY (`clase_id`) REFERENCES `clases` (`id`),
+  CONSTRAINT `FK_evento_destinatarios_eventos` FOREIGN KEY (`evento_id`) REFERENCES `eventos` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Volcando datos para la tabla lhizki.evento_destinatarios: ~3 rows (aproximadamente)
+INSERT INTO `evento_destinatarios` (`id`, `evento_id`, `clase_id`) VALUES
+	(2, 6, 4),
+	(3, 7, 4),
+	(4, 8, 4);
 
 -- Volcando estructura para tabla lhizki.glosario
 CREATE TABLE IF NOT EXISTS `glosario` (
@@ -242,7 +267,7 @@ CREATE TABLE IF NOT EXISTS `glosario` (
   `eusk` varchar(100) NOT NULL,
   `definicion` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla lhizki.glosario: ~120 rows (aproximadamente)
 INSERT INTO `glosario` (`id`, `rama`, `cast`, `eusk`, `definicion`) VALUES
@@ -380,11 +405,12 @@ CREATE TABLE IF NOT EXISTS `partidas` (
   `semana` int DEFAULT NULL,
   `fechaInicio` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla lhizki.partidas: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.partidas: ~0 rows (aproximadamente)
 INSERT INTO `partidas` (`id`, `semana`, `fechaInicio`) VALUES
-	(1, 44, '2025-10-28 08:29:08');
+	(1, 44, '2025-10-28 08:29:08'),
+	(2, 45, '2025-11-07 06:25:26');
 
 -- Volcando estructura para tabla lhizki.partida_user
 CREATE TABLE IF NOT EXISTS `partida_user` (
@@ -398,7 +424,7 @@ CREATE TABLE IF NOT EXISTS `partida_user` (
   KEY `partida_id` (`partida_id`),
   CONSTRAINT `partida_user_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `partida_user_ibfk_2` FOREIGN KEY (`partida_id`) REFERENCES `partidas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla lhizki.partida_user: ~5 rows (aproximadamente)
 INSERT INTO `partida_user` (`id`, `user_id`, `partida_id`, `puntuacion`, `fechaJugada`) VALUES
@@ -406,7 +432,8 @@ INSERT INTO `partida_user` (`id`, `user_id`, `partida_id`, `puntuacion`, `fechaJ
 	(3, 2, 1, 0, '2025-10-28 09:21:31'),
 	(5, 1, 1, 0, '2025-10-28 09:56:05'),
 	(6, 1, 1, 50, '2025-10-28 09:56:27'),
-	(7, 4, 1, 200, '2025-10-30 08:22:48');
+	(7, 4, 1, 200, '2025-10-30 08:22:48'),
+	(8, 6, 2, 0, '2025-11-07 06:26:11');
 
 -- Volcando estructura para tabla lhizki.ramas
 CREATE TABLE IF NOT EXISTS `ramas` (
@@ -435,7 +462,7 @@ CREATE TABLE IF NOT EXISTS `ranking` (
   CONSTRAINT `FK_ranking_ramas` FOREIGN KEY (`rama`) REFERENCES `ramas` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla lhizki.ranking: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.ranking: ~0 rows (aproximadamente)
 INSERT INTO `ranking` (`id`, `rama`, `centro`, `puntuacionRanking`) VALUES
 	(26, 1, 1, 250);
 
@@ -452,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `ranking_clases` (
   CONSTRAINT `ranking_clases_ibfk_1` FOREIGN KEY (`centro`) REFERENCES `centro_sector` (`centro`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
--- Volcando datos para la tabla lhizki.ranking_clases: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.ranking_clases: ~0 rows (aproximadamente)
 INSERT INTO `ranking_clases` (`id`, `clase`, `centro`, `puntuacionClase`) VALUES
 	(23, 4, 1, 250);
 
@@ -469,7 +496,7 @@ CREATE TABLE IF NOT EXISTS `ranking_sectores` (
   CONSTRAINT `ranking_sectores_ibfk_2` FOREIGN KEY (`centro`) REFERENCES `centro_sector` (`centro`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
--- Volcando datos para la tabla lhizki.ranking_sectores: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.ranking_sectores: ~0 rows (aproximadamente)
 INSERT INTO `ranking_sectores` (`id`, `sector`, `centro`, `puntuacionSector`) VALUES
 	(25, 2, 1, 250);
 
@@ -531,13 +558,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   CONSTRAINT `clase_user` FOREIGN KEY (`clase`) REFERENCES `clases` (`id`),
   CONSTRAINT `rol` FOREIGN KEY (`rol`) REFERENCES `roles` (`id`),
   CONSTRAINT `sector_user` FOREIGN KEY (`sector`) REFERENCES `sectores` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla lhizki.user: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.user: ~5 rows (aproximadamente)
 INSERT INTO `user` (`id`, `rol`, `nombre`, `apellido`, `mail`, `password`, `centro`, `sector`, `clase`, `puntuacionIndividual`, `token`, `fechaConfirmacion`) VALUES
 	(1, 3, 'juan', 'puertas', 'juanpu2004@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', 1, 2, 4, 50, NULL, '2025-10-27'),
 	(2, 3, 'Marcos', 'Brian', 'marcbaraka20@gmail.com', 'c4ca4238a0b923820dcc509a6f75849b', 1, 2, 4, 0, NULL, '2025-10-28'),
-	(4, 3, 'Aldo', 'Arrieta', 'aldo.dayron81@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', 1, 2, 4, 200, NULL, '2025-10-30');
+	(4, 1, 'Aldo', 'Arrieta', 'aldo.dayron81@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', 1, 2, 4, 200, NULL, '2025-10-30'),
+	(6, 2, 'Dayron', 'Arrieta', 'silverdayron20@gmail.com', '202cb962ac59075b964b07152d234b70', 1, 2, 4, 0, NULL, '2025-11-05'),
+	(8, 3, 'Asura', 'Tanaka', 'asuratanaka7@gmail.com', '202cb962ac59075b964b07152d234b70', 1, 2, 4, 0, NULL, '2025-11-05');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
