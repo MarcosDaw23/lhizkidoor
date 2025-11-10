@@ -5,6 +5,7 @@ spl_autoload_register(function ($class) {
         require_once $path;
     }
 });
+ob_start();
 session_start();
 
 if (!isset($_SESSION['user'])) {
@@ -474,11 +475,11 @@ $currentPage = $_GET['section'] ?? 'home';
                 <i class="bi bi-controller"></i>
                 <span>Juegos</span>
             </a>
-            <a href="./index.php?section=rankings" class="mobile-nav-item  <?= $currentPage === 'rankings' ? 'active' : '' ?>">
+            <a href="./sections/rankings.php" class="mobile-nav-item">
                 <i class="bi bi-trophy-fill"></i>
                 <span>Ranking</span>
             </a>
-            <a href="./controllers/obtenerGlosario_controller.php" class="mobile-nav-item  <?= $currentPage === 'verGlosario' ? 'active' : '' ?>">
+            <a href="./controllers/obtenerGlosario_controller.php" class="mobile-nav-item">
                 <i class="bi bi-journal-text"></i>
                 <span>Glosario</span>
             </a>
@@ -503,3 +504,4 @@ $currentPage = $_GET['section'] ?? 'home';
     
 </body>
 </html>
+<?php ob_end_flush(); ?>
