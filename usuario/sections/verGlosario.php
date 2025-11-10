@@ -201,11 +201,14 @@ $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
         font-size: 0.95rem;
     }
 
-    .glossary-table thead {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        position: relative;
-    }
+ .glossary-table thead {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #2c3e50;
+    position: relative;
+    font-weight: 700;
+}
 
     .glossary-table thead::after {
         content: '';
@@ -216,6 +219,14 @@ $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
         height: 3px;
         background: linear-gradient(90deg, #ff6b6b 0%, #4facfe 100%);
     }
+    .glossary-table thead::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(215, 38, 56, 0.25), rgba(0, 127, 95, 0.25));
+    z-index: -1;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
 
     .glossary-table thead th {
         padding: 20px 24px;
@@ -271,16 +282,23 @@ $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
 
     .glossary-table .col-spanish {
         font-weight: 700;
-        color: #2c3e50;
+        color: #000;
         width: 25%;
         position: relative;
     }
 
-    .glossary-table .col-spanish::before {
-        content: '📖';
-        margin-right: 8px;
-        font-size: 1.1rem;
-    }
+.glossary-table .col-spanish::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 14px;
+    margin-right: 8px;
+    background-image: url('https://flagcdn.com/es.svg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 2px;
+    vertical-align: middle;
+}
 
     .glossary-table .col-euskera {
         font-weight: 600;
@@ -288,12 +306,18 @@ $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
         width: 25%;
         position: relative;
     }
-
-    .glossary-table .col-euskera::before {
-        content: '🗣️';
-        margin-right: 8px;
-        font-size: 1.1rem;
-    }
+.glossary-table .col-euskera::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 14px;
+    margin-right: 8px;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2d/Flag_of_the_Basque_Country.svg'); /* Ikurriña */
+    background-size: cover;
+    background-position: center;
+    border-radius: 2px;
+    vertical-align: middle;
+}
 
     .glossary-table .col-definition {
         color: #555;
@@ -438,7 +462,7 @@ $ramaSeleccionada = $_SESSION['ramaSeleccionada'] ?? '';
                    name="buscar" 
                    id="buscar" 
                    class="filter-input"
-                   placeholder="🔍 Buscar palabra...">
+                   placeholder="Buscar palabra...">
 
             <select name="rama" id="rama" class="filter-select">
     <?php foreach ($ramas as $r): ?>

@@ -92,17 +92,10 @@ $progreso = (($indice + 1) / $total) * 100;
         font-size: 1.2rem;
         margin-bottom: 30px;
         box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
-        animation: float 3s ease-in-out infinite;
+      
     }
+   
 
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-10px);
-        }
-    }
 
     .progress-bar-container {
         width: 100%;
@@ -239,7 +232,7 @@ $progreso = (($indice + 1) / $total) * 100;
     }
 
     .option-card:hover {
-        transform: translateX(10px);
+        transform: translateX(5px);
         border-color: rgba(79, 172, 254, 0.5);
         background: rgba(79, 172, 254, 0.08);
     }
@@ -256,7 +249,7 @@ $progreso = (($indice + 1) / $total) * 100;
         border-color: #4facfe;
         background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(0, 242, 254, 0.1) 100%);
         box-shadow: 0 10px 40px rgba(79, 172, 254, 0.4);
-        transform: translateX(10px) scale(1.02);
+        transform: translateX(3px) scale(1.02);
     }
 
     .option-label {
@@ -483,22 +476,94 @@ $progreso = (($indice + 1) / $total) * 100;
     }
 
     @media (max-width: 768px) {
-        .question-card {
-            padding: 40px 25px;
+        .game-container {
+            padding: 12px;
         }
-
-        .definition-text {
+        .main-container {
+            padding: 24px 16px;
+        }
+        .question-card {
+            padding: 18px 12px;
+            border-radius: 18px;
+            max-width: 100vw;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .question-header {
+            margin-bottom: 18px;
+        }
+        .question-number {
+            padding: 12px 18px;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            border-radius: 24px;
+            gap: 8px;
+        }
+        .progress-bar-container {
+            height: 10px;
+            margin-bottom: 12px;
+        }
+        .question-icon {
+            width: 44px;
+            height: 44px;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+        .definition-box {
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+        }
+        .definition-label {
+            font-size: 1rem;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .definition-label i {
             font-size: 1.2rem;
         }
-
-        .option-label {
-            font-size: 1.1rem;
+        .definition-text {
+            font-size: 1.15rem;
+            line-height: 1.5;
         }
-
-        .question-icon {
-            width: 80px;
-            height: 80px;
-            font-size: 3rem;
+        .options-container {
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .option-card {
+            gap: 10px;
+            padding: 14px 10px;
+            border-radius: 12px;
+        }
+        .option-label {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+        }
+        .submit-button {
+            padding: 14px;
+            font-size: 1.15rem;
+            border-radius: 12px;
+            gap: 10px;
+        }
+        .submit-button i {
+            font-size: 1.2rem;
+        }
+        .score-display {
+            margin-top: 14px;
+            padding: 10px;
+            border-radius: 10px;
+            gap: 10px;
+        }
+        .score-display i {
+            font-size: 1.2rem;
+        }
+        .score-text {
+            font-size: 1.15rem;
         }
     }
 </style>
@@ -515,9 +580,7 @@ $progreso = (($indice + 1) / $total) * 100;
                 <div class="progress-bar-fill" style="width: <?= $progreso ?>%"></div>
             </div>
 
-            <div class="question-icon">
-                <i class="bi bi-lightbulb-fill"></i>
-            </div>
+        
         </div>
 
         <div class="definition-box">

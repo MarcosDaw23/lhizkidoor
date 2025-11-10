@@ -23,7 +23,7 @@ $yaJugo = $_SESSION['yaJugo'] ?? false;
     .games-container::before {
         width: 300px;
         height: 300px;
-        background: linear-gradient(135deg, #667eea 20%, #764ba2 60%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         top: -100px;
         right: -50px;
         animation: float 6s ease-in-out infinite;
@@ -60,14 +60,14 @@ $yaJugo = $_SESSION['yaJugo'] ?? false;
     .status-card::before {
         content: '';
         position: absolute;
-        top: -74%;
+        top: -50%;
         left: -50%;
         width: 200%;
         height: 200%;
         background: conic-gradient(
             transparent,
             rgba(102, 126, 234, 0.3),
-            transparent 50%
+            transparent 30%
         );
         animation: rotate 6s linear infinite;
     }
@@ -184,6 +184,51 @@ $yaJugo = $_SESSION['yaJugo'] ?? false;
         letter-spacing: 1.5px;
         margin-top: 8px;
         font-weight: 700;
+    }
+
+    /* Botón Juega Ahora */
+    .play-now-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 40px;
+        font-size: 1.15rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .play-now-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .play-now-btn:hover::before {
+        left: 100%;
+    }
+
+    .play-now-btn:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+    }
+
+    .play-now-btn:active {
+        transform: translateY(-2px) scale(1.02);
     }
 
     /* Games Grid */
@@ -461,7 +506,10 @@ $yaJugo = $_SESSION['yaJugo'] ?? false;
                     <i class="bi bi-trophy-fill"></i>
                 </div>
                 <div class="status-message">¡Partida Semanal Disponible!</div>
-                <p style="color: #666; font-size: 1.05rem;">Completa el desafío de esta semana y suma puntos al ranking</p>
+                <p style="color: #666; font-size: 1.05rem; margin-bottom: 25px;">Completa el desafío de esta semana y suma puntos al ranking</p>
+                <a href="./controllers/PartidaSemanal_controller.php?action=jugar" class="play-now-btn">
+                    <i class="bi bi-play-fill"></i> ¡Juega Ahora!
+                </a>
             </div>
         </div>
     <?php else: ?>
@@ -492,30 +540,12 @@ $yaJugo = $_SESSION['yaJugo'] ?? false;
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
+      </div>
     <?php endif; ?>
 
     <!-- Grid de juegos -->
     <div class="games-grid">
-        <!-- Partida Semanal (destacada si está disponible) -->
-        <?php if (!$yaJugo): ?>
-            <a href="./controllers/PartidaSemanal_controller.php?action=jugar" class="game-card featured semanal">
-                <div class="game-icon-wrapper">
-                    <div class="game-icon">
-                        🏆
-                    </div>
-                </div>
-                <h3 class="game-title">Partida Semanal</h3>
-                <p class="game-description">
-                    Desafío de 10 preguntas sobre tu especialidad. ¡Compite contra tus compañeros por el ranking!
-                </p>
-                <span class="game-badge badge-available">
-                    <i class="bi bi-play-fill"></i> ¡Juega Ahora!
-                </span>
-            </a>
-        <?php endif; ?>
-
         <!-- Práctica Libre -->
         <a href="./controllers/Preguntas_controller.php?action=start" class="game-card practica">
             <div class="game-icon-wrapper">
@@ -563,7 +593,7 @@ $yaJugo = $_SESSION['yaJugo'] ?? false;
                 <i class="bi bi-clock"></i> Próximamente
             </span>
         </a>
-    </div>
+  </div>
 </div>
 
 <?php if ($yaJugo): ?>
