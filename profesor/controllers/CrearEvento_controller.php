@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $nombre = $u['nombre'];
                 $apellido = $u['apellido'];
 
-                $link = "http://localhost/lhizkidoor/usuario/index.php?section=partidaEvento&evento=$evento_id";
+                $link = "http://localhost/php/lhizkidoor/usuario/index.php?section=partidaEvento&evento=$evento_id";
 
                 $mailer = new PHPMailer(true);
 
