@@ -48,31 +48,42 @@ class AccesoBD_Profesor {
         return $centros;
     }
 
-    public function obtenerEstadisticasJugadores() {
-        $db = new AccesoBD();
-        $conn = $db->conexion;
+    public function obtenerEstadisticasJugadores($clase) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
 
-        // Total de usuarios con rol=3 (asumo que 3 = alumno)
-        $sql_total = "SELECT COUNT(*) AS total_usuarios FROM user WHERE rol = 3";
-        $total = $conn->query($sql_total)->fetch_assoc()['total_usuarios'];
+    // Total de alumnos en la clase
+    $sql_total = "SELECT COUNT(*) AS total_usuarios 
+                  FROM user 
+                  WHERE rol = 3 AND clase = ?";
+    $stmt_total = $conn->prepare($sql_total);
+    $stmt_total->bind_param("i", $clase);
+    $stmt_total->execute();
+    $res_total = $stmt_total->get_result();
+    $total = (int)$res_total->fetch_assoc()['total_usuarios'];
 
-        // Usuarios que han jugado al menos una partida
-        $sql_jugados = "SELECT COUNT(DISTINCT pu.user_id) AS usuarios_jugaron
-                        FROM partida_user pu
-                        JOIN user u ON pu.user_id = u.id
-                        WHERE u.rol = 3";
-        $jugados = $conn->query($sql_jugados)->fetch_assoc()['usuarios_jugaron'];
+    // Alumnos que han jugado al menos una partida en esa clase
+    $sql_jugados = "SELECT COUNT(DISTINCT pu.user_id) AS usuarios_jugaron
+                    FROM partida_user pu
+                    JOIN user u ON pu.user_id = u.id
+                    WHERE u.rol = 3 AND u.clase = ?";
+    $stmt_jugados = $conn->prepare($sql_jugados);
+    $stmt_jugados->bind_param("i", $clase);
+    $stmt_jugados->execute();
+    $res_jugados = $stmt_jugados->get_result();
+    $jugados = (int)$res_jugados->fetch_assoc()['usuarios_jugaron'];
 
-        $no_jugados = $total - $jugados;
+    // Nunca negativo
+    $no_jugados = max(0, $total - $jugados);
 
-        $db->cerrarConexion();
+    $db->cerrarConexion();
 
-        return [
-            'total' => (int)$total,
-            'jugados' => (int)$jugados,
-            'no_jugados' => (int)$no_jugados
-        ];
-    }
+    return [
+        'total' => $total,
+        'jugados' => $jugados,
+        'no_jugados' => $no_jugados
+    ];
+}
 
     public function obtenerSectores() {
         $db = new AccesoBD();
