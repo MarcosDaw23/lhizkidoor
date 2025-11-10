@@ -18,16 +18,84 @@ class AccesoBD_Usuario {
         $db->cerrarConexion();
     }
 
-    public function obtenerEventoPorId($eventoId) {
+     public function insertarRanking($id_evento, $alumno, $puntuacion, $fallos, $aciertos) {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        $sql = "INSERT INTO evento_ranking (id_evento, alumno, puntuacion, fallos, aciertos)
+                VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("isiii", $id_evento, $alumno, $puntuacion, $fallos, $aciertos);
+        $stmt->execute();
+
+        $insertId = $conn->insert_id;
+
+        $stmt->close();
+        $db->cerrarConexion();
+        return $insertId;
+    }
+
+    // 3️⃣ Obtener todos los registros de un evento específico
+    public function obtenerPorEvento($id_evento) {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        // Limitar a los 5 primeros resultados
+        $sql = "SELECT * FROM evento_ranking WHERE id_evento = ? ORDER BY puntuacion DESC LIMIT 5";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_evento);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $registros = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+        $db->cerrarConexion();
+        return $registros;
+    }
+
+    public function obtenerMiEstadistica($id_evento, $id_usuario) {
     $db = new AccesoBD();
     $conn = $db->conexion;
-    $stmt = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
-    $stmt->bind_param("i", $eventoId);
+
+    // 1. Obtener aciertos, fallos y puntuación
+    $sql = "SELECT aciertos, fallos, puntuacion 
+            FROM evento_ranking 
+            WHERE id_evento = ? AND id_usuario = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $id_evento, $id_usuario);
     $stmt->execute();
-    $res = $stmt->get_result()->fetch_assoc();
-    $db->cerrarConexion();
-    return $res;
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
+
+    if (!$row) {
+        $db->cerrarConexion();
+        return null; // Usuario no encontrado en el evento
     }
+
+    // 2. Calcular posición
+    $sqlPos = "SELECT COUNT(*) AS posicion 
+               FROM evento_ranking 
+               WHERE id_evento = ? AND puntuacion > ?";
+    $stmtPos = $conn->prepare($sqlPos);
+    $stmtPos->bind_param("ii", $id_evento, $row['puntuacion']);
+    $stmtPos->execute();
+    $resultPos = $stmtPos->get_result();
+    $rowPos = $resultPos->fetch_assoc();
+    $posicion = $rowPos ? $rowPos['posicion'] + 1 : 1; // +1 porque la posición empieza en 1
+    $stmtPos->close();
+
+    $db->cerrarConexion();
+
+    // 3. Retornar todos los datos
+    return [
+        'aciertos' => $row['aciertos'],
+        'fallos' => $row['fallos'],
+        'puntuacion' => $row['puntuacion'],
+        'posicion' => $posicion
+    ];
+}
 
     public function obtenerPreguntasEvento($cantidad) {
         $db = new AccesoBD();

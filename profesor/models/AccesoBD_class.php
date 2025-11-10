@@ -36,6 +36,42 @@ class AccesoBD_Profesor {
         return $usuarios;
     }
 
+    // 3️⃣ Obtener todos los registros de un evento específico
+    public function obtenerPorEvento($id_evento) {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        // Limitar a los 5 primeros resultados
+        $sql = "SELECT * FROM evento_ranking WHERE id_evento = ? ORDER BY puntuacion DESC LIMIT 5";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_evento);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $registros = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+        $db->cerrarConexion();
+        return $registros;
+    }
+
+        // 2️⃣ Eliminar todos los registros de un evento específico
+    public function eliminarPorEvento($id_evento) {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        $sql = "DELETE FROM evento_ranking WHERE id_evento = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_evento);
+        $stmt->execute();
+
+        $filasAfectadas = $stmt->affected_rows;
+
+        $stmt->close();
+        $db->cerrarConexion();
+        return $filasAfectadas;
+    }
+
     public function obtenerCentros() {
         $db = new AccesoBD();
         $sql = "SELECT id, nombre FROM centro ORDER BY nombre ASC";

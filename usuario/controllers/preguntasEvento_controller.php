@@ -10,6 +10,11 @@ if (!isset($_SESSION['user'])) {
 $bd = new AccesoBD_Usuario();
 $usuarioId = $_SESSION['user']['id'];
 $action = $_GET['action'] ?? 'start';
+$evento = isset($_GET['evento']) ? intval($_GET['evento']) : null;
+$_SESSION['evento'] = $evento;
+$nombre = $_SESSION['user']['nombre'];
+$fallos = $_SESSION['fallos'] = 0;
+$aciertos = $_SESSION['aciertos'] = 0;
 
 switch ($action) {
 
@@ -18,6 +23,8 @@ switch ($action) {
     $preguntas = $_SESSION['preguntas'];
     $respuesta = $_POST['opcion'] ?? null;
     $correcta = $preguntas[$indice]['ondo'];
+    $evento = $_GET['evento'];
+    $puntuacion = $_SESSION['puntuacion'];
 
     $_SESSION['resultados'][] = [
       'definicion' => $preguntas[$indice]['definicion'],
@@ -32,8 +39,10 @@ switch ($action) {
 
     if ($respuesta == $correcta) {
       $_SESSION['puntuacion'] += 100;
+      $_SESSION['aciertos'] += 1;
     } else {
       $_SESSION['puntuacion'] -= 50;
+      $_SESSION['fallos'] += 1;
       if ($_SESSION['puntuacion'] < 0) $_SESSION['puntuacion'] = 0;
     }
 
@@ -49,6 +58,7 @@ switch ($action) {
   case 'finalizar':
     $_SESSION['mensaje'] = "Has completado el evento. Tu puntuación fue: " . ($_SESSION['puntuacion'] ?? 0) . " puntos.";
     $_SESSION['tipo_mensaje'] = "success";
+    $bd->insertarRanking($evento,$nombre, $puntuacion, $fallos, $aciertos);
     header("Location: ../index.php?section=resultadosPartidas");
     exit;
 
