@@ -65,7 +65,7 @@ session_start();
       .logo-section .graduation-icon {
         width: 90px;
         height: 90px;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.86);
         padding: 10px;
         border-radius: 12px;
         object-fit: contain;

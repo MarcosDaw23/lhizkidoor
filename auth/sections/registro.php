@@ -99,7 +99,7 @@
           Contraseña
         </label>
         <div class="password-input-wrapper">
-          <input type="password" name="password1" id="password1" class="form-control" placeholder="••••••••" required>
+          <input type="password" name="password1" id="password1" class="form-control" placeholder="••••••••" required minlength="8">
           <button type="button" class="password-toggle" onclick="togglePassword('password1')" tabindex="-1">
             <i class="bi bi-eye"></i>
           </button>
@@ -112,7 +112,7 @@
           Repite la contraseña
         </label>
         <div class="password-input-wrapper">
-          <input type="password" name="password2" id="password2" class="form-control" placeholder="••••••••" required>
+          <input type="password" name="password2" id="password2" class="form-control" placeholder="••••••••" required minlength="8">
           <button type="button" class="password-toggle" onclick="togglePassword('password2')" tabindex="-1">
             <i class="bi bi-eye"></i>
           </button>
@@ -221,6 +221,18 @@ $(document).ready(function(){
     $('#etapa-porcentaje').text(porcentaje + '%');
     $('#etapa-texto').text(texto);
   }
+
+  // Validación de contraseña mínima antes de enviar
+  $('#registerForm').on('submit', function(e){
+    const pass1 = $('#password1').val();
+    const pass2 = $('#password2').val();
+    if(pass1.length < 8 || pass2.length < 8){
+      alert('La contraseña debe tener al menos 8 caracteres.');
+      e.preventDefault();
+      return false;
+    }
+    // ...puedes agregar otras validaciones aquí...
+  });
 
 });
 </script>
