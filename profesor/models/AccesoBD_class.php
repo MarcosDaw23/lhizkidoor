@@ -48,6 +48,32 @@ class AccesoBD_Profesor {
         return $centros;
     }
 
+    public function obtenerEstadisticasJugadores() {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        // Total de usuarios con rol=3 (asumo que 3 = alumno)
+        $sql_total = "SELECT COUNT(*) AS total_usuarios FROM user WHERE rol = 3";
+        $total = $conn->query($sql_total)->fetch_assoc()['total_usuarios'];
+
+        // Usuarios que han jugado al menos una partida
+        $sql_jugados = "SELECT COUNT(DISTINCT pu.user_id) AS usuarios_jugaron
+                        FROM partida_user pu
+                        JOIN user u ON pu.user_id = u.id
+                        WHERE u.rol = 3";
+        $jugados = $conn->query($sql_jugados)->fetch_assoc()['usuarios_jugaron'];
+
+        $no_jugados = $total - $jugados;
+
+        $db->cerrarConexion();
+
+        return [
+            'total' => (int)$total,
+            'jugados' => (int)$jugados,
+            'no_jugados' => (int)$no_jugados
+        ];
+    }
+
     public function obtenerSectores() {
         $db = new AccesoBD();
         $sql = "SELECT id, nombre FROM sectores ORDER BY nombre ASC";
@@ -172,35 +198,6 @@ class AccesoBD_Profesor {
         $db->cerrarConexion();
         return $resultado ? true : false;
     }
-
-    public function obtenerEstadisticasPartidas() {
-    $db = new AccesoBD();
-    $conn = $db->conexion;
-
-    $sql = "
-        SELECT 
-            u.id AS user_id,
-            CONCAT(u.nombre, ' ', u.apellido) AS jugador,
-            COUNT(pu.id) AS partidas_jugadas,
-            SUM(pu.puntuacion) AS total_puntos,
-            AVG(pu.puntuacion) AS promedio_puntos,
-            MAX(pu.fechaJugada) AS ultima_partida
-        FROM partida_user pu
-        INNER JOIN user u ON pu.user_id = u.id
-        GROUP BY u.id
-        ORDER BY total_puntos DESC
-    ";
-
-    $result = $conn->query($sql);
-    $estadisticas = [];
-
-    while ($fila = $result->fetch_assoc()) {
-        $estadisticas[] = $fila;
-    }
-
-    $db->cerrarConexion();
-    return $estadisticas;
-}
 
     public function crearEvento($nombre, $profesor_id, $num_preguntas, $clases) {
     $db = new AccesoBD();

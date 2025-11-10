@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `centro` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla lhizki.centro: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.centro: ~1 rows (aproximadamente)
 INSERT INTO `centro` (`id`, `nombre`) VALUES
 	(1, 'san luis');
 
@@ -407,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `partidas` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla lhizki.partidas: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.partidas: ~2 rows (aproximadamente)
 INSERT INTO `partidas` (`id`, `semana`, `fechaInicio`) VALUES
 	(1, 44, '2025-10-28 08:29:08'),
 	(2, 45, '2025-11-07 06:25:26');
@@ -426,7 +426,7 @@ CREATE TABLE IF NOT EXISTS `partida_user` (
   CONSTRAINT `partida_user_ibfk_2` FOREIGN KEY (`partida_id`) REFERENCES `partidas` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla lhizki.partida_user: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.partida_user: ~6 rows (aproximadamente)
 INSERT INTO `partida_user` (`id`, `user_id`, `partida_id`, `puntuacion`, `fechaJugada`) VALUES
 	(1, 1, 3, 0, '2025-10-28 08:28:00'),
 	(3, 2, 1, 0, '2025-10-28 09:21:31'),
@@ -462,7 +462,7 @@ CREATE TABLE IF NOT EXISTS `ranking` (
   CONSTRAINT `FK_ranking_ramas` FOREIGN KEY (`rama`) REFERENCES `ramas` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla lhizki.ranking: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.ranking: ~1 rows (aproximadamente)
 INSERT INTO `ranking` (`id`, `rama`, `centro`, `puntuacionRanking`) VALUES
 	(26, 1, 1, 250);
 
@@ -479,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `ranking_clases` (
   CONSTRAINT `ranking_clases_ibfk_1` FOREIGN KEY (`centro`) REFERENCES `centro_sector` (`centro`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
--- Volcando datos para la tabla lhizki.ranking_clases: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.ranking_clases: ~1 rows (aproximadamente)
 INSERT INTO `ranking_clases` (`id`, `clase`, `centro`, `puntuacionClase`) VALUES
 	(23, 4, 1, 250);
 
@@ -496,7 +496,7 @@ CREATE TABLE IF NOT EXISTS `ranking_sectores` (
   CONSTRAINT `ranking_sectores_ibfk_2` FOREIGN KEY (`centro`) REFERENCES `centro_sector` (`centro`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
--- Volcando datos para la tabla lhizki.ranking_sectores: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla lhizki.ranking_sectores: ~1 rows (aproximadamente)
 INSERT INTO `ranking_sectores` (`id`, `sector`, `centro`, `puntuacionSector`) VALUES
 	(25, 2, 1, 250);
 

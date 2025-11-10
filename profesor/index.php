@@ -55,10 +55,10 @@ $usuario = $_SESSION['user'];
             <span>Crear eventos</span>
           </a>
           <a href="index.php?section=rankings" class="menu-item">
-            <i class="bi bi-bar-chart"></i>
+            <i class="bi bi-trophy"></i>
             <span>Ranking</span>
           </a>
-          <a href="./controllers/Estadisticas_controller.php" class="menu-item">
+          <a href="index.php?section=Estadisticas" class="menu-item">
             <i class="bi bi-bar-chart"></i>
             <span>Estadisticas</span>
           </a>

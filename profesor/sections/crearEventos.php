@@ -60,14 +60,6 @@ $sectores = $db->obtenerSectores();
             <i class="bi bi-check-circle"></i> Crear evento
           </button>
         </div>
-        <?php if (isset($_SESSION['mensaje'])): ?>
-    <div class="alert alert-<?= $_SESSION['tipo_mensaje'] ?> alert-dismissible fade show" role="alert">
-        <?= $_SESSION['mensaje'] ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['mensaje'], $_SESSION['tipo_mensaje']); ?>
-<?php endif; ?>
-
 
       </form>
     </div>
