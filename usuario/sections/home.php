@@ -362,7 +362,7 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
             Puedes repasar o explorar otras secciones
         </p>
 
-        <a href="./controllers/PartidaSemanal_controller.php?action=repasar" class="secondary-button">
+        <a href="./index.php?section=juegos" class="secondary-button">
             <i class="bi bi-arrow-repeat"></i>
             <span>Repasar Preguntas</span>
     </a>
