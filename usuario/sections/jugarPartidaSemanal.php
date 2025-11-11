@@ -480,12 +480,10 @@ if (!$palabra) {
         <div class="weekly-header">
             <div class="weekly-badge">
                 <i class="bi bi-trophy-fill"></i>
-                <span>Partida Semanal</span>
+                <span>Partida de Repaso</span>
             </div>
 
-            <div class="weekly-icon">
-                🎯
-            </div>
+        
         </div>
 
         <div class="definition-container">
