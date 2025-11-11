@@ -74,26 +74,11 @@ class AccesoBD_Usuario {
         return null; // Usuario no encontrado en el evento
     }
 
-    // 2. Calcular posición
-    $sqlPos = "SELECT COUNT(*) AS posicion 
-               FROM evento_ranking 
-               WHERE id_evento = ? AND puntuacion > ?";
-    $stmtPos = $conn->prepare($sqlPos);
-    $stmtPos->bind_param("ii", $id_evento, $row['puntuacion']);
-    $stmtPos->execute();
-    $resultPos = $stmtPos->get_result();
-    $rowPos = $resultPos->fetch_assoc();
-    $posicion = $rowPos ? $rowPos['posicion'] + 1 : 1; // +1 porque la posición empieza en 1
-    $stmtPos->close();
-
-    $db->cerrarConexion();
-
     // 3. Retornar todos los datos
     return [
         'aciertos' => $row['aciertos'],
         'fallos' => $row['fallos'],
         'puntuacion' => $row['puntuacion'],
-        'posicion' => $posicion
     ];
 }
 

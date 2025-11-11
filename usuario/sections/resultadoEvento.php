@@ -7,7 +7,6 @@ $bd = new AccesoBD_class();
 $miEstadistica = $bd->obtenerMiEstadistica($id_evento, $id_usuario);
 
 if ($miEstadistica) {
-    echo "Posición: " . $miEstadistica['posicion'] . "<br>";
     echo "Puntos: " . $miEstadistica['puntuacion'] . "<br>";
     echo "Aciertos: " . $miEstadistica['aciertos'] . "<br>";
     echo "Fallos: " . $miEstadistica['fallos'];
