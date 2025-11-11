@@ -1,14 +1,21 @@
 <?php
-require_once 'AccesoBD.php';
+require_once __DIR__ . '/../models/AccesoBD_class.php';
 
-// Verificar si existe un id_evento (por ejemplo desde la URL o la sesión)
-session_start();
-$id_evento = $_SESSION['evento'] ?? null;
 
-if (!$id_evento) {
-    echo "<p>No se especificó ningún evento.</p>";
-    exit;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
+
+if (empty($_SESSION['evento'])) {
+    echo "No hay evento en la sesión.";
+    return; // Salir de esta sección
+}else{
+    $id_evento = $_SESSION['evento'];
+    echo $id_evento;
+}
+
+
+
 
 $bd = new AccesoBD_Profesor();
 $filas = $bd->obtenerPorEvento($id_evento);
@@ -16,7 +23,7 @@ $filas = $bd->obtenerPorEvento($id_evento);
 ?>
 
 <!-- Botón para finalizar evento -->
-<button id="btnFinalizarEvento">Finalizar evento</button>
+<button id="btnFinalizarEvento">VISUALIZAR RANKING</button>
 
 <!-- Contenedor oculto inicialmente -->
 <section id="seccionRanking" class="tabla-ranking" style="display:none;">
@@ -49,9 +56,18 @@ $filas = $bd->obtenerPorEvento($id_evento);
         </table>
         <br>
         <!-- Botón para finalizar ranking -->
-        <button id="btnFinalizarRanking">Finalizar ranking</button>
+        <form action="./controllers/finalizarRankingEvento.php" method="POST">
+            <input type="hidden" name="id_evento" value="<?= $id_evento ?>">
+            <button type="submit" id="btnFinalizarRanking">Finalizar Ranking</button>
+        </form>
     <?php else: ?>
         <p>No hay registros en este evento todavía.</p>
+        <button id="btnRecargarRanking">Recargar ranking</button>
+        <script>
+            document.getElementById('btnRecargarRanking').addEventListener('click', function() {
+                location.reload(); // recarga la página completa
+            });
+        </script>
     <?php endif; ?>
 </section>
 
@@ -60,17 +76,5 @@ $filas = $bd->obtenerPorEvento($id_evento);
 document.getElementById('btnFinalizarEvento').addEventListener('click', function() {
     document.getElementById('seccionRanking').style.display = 'block';
     this.style.display = 'none'; // Oculta el botón de "Finalizar evento"
-});
-
-// Acción al pulsar "Finalizar ranking"
-document.getElementById('btnFinalizarRanking')?.addEventListener('click', function() {
-    <?php
-        $bd->eliminarPorEvento($id_evento);
-        header("Location: index.php");
-        exit;
-    ?>
-    // Aquí puedes hacer lo que necesites, por ejemplo:
-    alert('El ranking ha sido finalizado.');
-
 });
 </script>

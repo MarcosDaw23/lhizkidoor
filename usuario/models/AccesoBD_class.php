@@ -82,6 +82,17 @@ class AccesoBD_Usuario {
     ];
 }
 
+public function obtenerEventoPorId($eventoId) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+    $stmt = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
+    $stmt->bind_param("i", $eventoId);
+    $stmt->execute();
+    $res = $stmt->get_result()->fetch_assoc();
+    $db->cerrarConexion();
+    return $res;
+    }
+
     public function obtenerPreguntasEvento($cantidad) {
         $db = new AccesoBD();
         $conn = $db->conexion;

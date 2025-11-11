@@ -27,6 +27,8 @@ $_SESSION['evento_id'] = $eventoId;
 $_SESSION['preguntas'] = $preguntas;
 $_SESSION['indicePregunta'] = 0;
 $_SESSION['puntuacion'] = 0;
+$_SESSION['fallos'] = 0;
+$_SESSION['aciertos'] = 0;
 
 header("Location: index.php?section=preguntasEvento");
 exit;

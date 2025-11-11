@@ -45,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $bdUsuario = new AccesoBD_Usuario();
         $_SESSION['yaJugo'] = $bdUsuario->haJugadoEstaSemana($resultado['id']);
         $_SESSION['semana_jugada'] = date('W'); 
-
         $_SESSION['mensaje'] = "Inicio correcto. Kaixo " . htmlspecialchars($resultado['nombre']);
         $_SESSION['tipo_mensaje'] = "success";
 

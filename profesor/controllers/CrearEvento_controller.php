@@ -6,34 +6,31 @@ require_once __DIR__ . '/../models/AccesoBD_class.php';
 require_once __DIR__ . '/../../vendor/autoload.php'; 
 
 session_start();
-
 // Verifica acceso del profesor
 if (!isset($_SESSION['user']) || $_SESSION['user']['rol'] != 2) {
     header("Location: ../../auth/index.php?section=login");
     exit;
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombreEvento = trim($_POST['nombre'] ?? '');
     $num_preguntas = intval($_POST['num_preguntas'] ?? 10);
     $clases = $_POST['clases'] ?? [];
-
+    $evento_id;
     if ($nombreEvento && $clases) {
         $profesor_id = $_SESSION['user']['id'];
         $db = new AccesoBD_Profesor();
 
         // Crear evento
         $evento_id = $db->crearEvento($nombreEvento, $profesor_id, $num_preguntas, $clases);
-
+        
         if ($evento_id) {
             $usuarios = $db->obtenerUsuariosEvento($clases);
-
             foreach ($usuarios as $u) {
                 $email = $u['mail'];
                 $nombre = $u['nombre'];
                 $apellido = $u['apellido'];
 
-                $link = "http://localhost/php/lhizkidoor/usuario/index.php?section=partidaEvento&evento=$evento_id";
+                $link = "http://localhost/lhizkidoor/usuario/index.php?section=partidaEvento&evento=$evento_id";
 
                 $mailer = new PHPMailer(true);
 
@@ -78,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['mensaje'] = "Debes completar todos los campos y seleccionar al menos una clase o sector.";
         $_SESSION['tipo_mensaje'] = "warning";
     }
-
-    header("Location: ../index.php?section=CrearEventos");
+    $_SESSION['evento'] = $evento_id;
+    header("Location: ../index.php?section=rankingEvento");
     exit;
 }
 ?>
