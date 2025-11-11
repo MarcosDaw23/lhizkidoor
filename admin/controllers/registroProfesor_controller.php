@@ -31,6 +31,7 @@ $user = new User(
     $centro,
     $sector,
     $clase,
+    0,                  // puntuacionIndividual -> agregado
     null,               
     date('Y-m-d H:i:s') 
 );
