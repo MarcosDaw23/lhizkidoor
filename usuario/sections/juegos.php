@@ -563,7 +563,7 @@ $yaJugo = $_SESSION['yaJugo'] ?? false;
         </a>
 
         <!-- Traducción -->
-        <a href="./controllers/nsq_controller.php" class="game-card traduccion">
+        <a href="./index.php?section=traduccionJuego" class="game-card traduccion">
             <div class="game-icon-wrapper">
                 <div class="game-icon">
                     ✍️
@@ -579,7 +579,7 @@ $yaJugo = $_SESSION['yaJugo'] ?? false;
         </a>
 
         <!-- Ahorcado -->
-        <a href="./controllers/nsq_controller.php" class="game-card ahorcado">
+        <a href="#" class="game-card ahorcado">
             <div class="game-icon-wrapper">
                 <div class="game-icon">
                     🎯

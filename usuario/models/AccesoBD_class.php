@@ -520,6 +520,43 @@ public function actualizarRankingSectores($centro, $sector) {
     $db->cerrarConexion();
 }
 
+// 🔹 Obtener palabra aleatoria del glosario según la rama del usuario
+public function obtenerPalabraTraduccionPorUsuario($usuarioId) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT g.id, g.cast, g.eusk, g.definicion
+            FROM glosario g
+            INNER JOIN sectores s ON g.rama = s.rama
+            INNER JOIN user u ON u.sector = s.id
+            WHERE u.id = ?
+            ORDER BY RAND()
+            LIMIT 1";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $usuarioId);
+    $stmt->execute();
+    $res = $stmt->get_result()->fetch_assoc();
+
+    $db->cerrarConexion();
+    return $res;
+}
+
+// 🔹 Obtener palabra del glosario por id
+public function obtenerPalabraPorId($idPalabra) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT id, cast, eusk, definicion FROM glosario WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $idPalabra);
+    $stmt->execute();
+    $res = $stmt->get_result()->fetch_assoc();
+
+    $db->cerrarConexion();
+    return $res;
+}
+
 
 }
 ?>
