@@ -391,11 +391,72 @@ $currentPage = $_GET['section'] ?? 'home';
     </style>
 </head>
 
+<script>
+/**
+ * 🎵 Reproductor persistente entre páginas
+ * Mantiene la música sonando aunque cambies de sección o se recargue el contenido.
+ */
+(function() {
+    // Verificar si ya existe el reproductor global
+    if (!window.globalMusicPlayer) {
+        const audio = new Audio("../core/musica/Entrada.wav");
+        audio.loop = true;
+        audio.volume = 0.5;
+        window.globalMusicPlayer = audio;
+
+        // Restaurar progreso guardado
+        const savedTime = localStorage.getItem('musicTime');
+        if (savedTime) audio.currentTime = parseFloat(savedTime);
+
+        // Guardar progreso al salir
+        window.addEventListener('beforeunload', () => {
+            if (!audio.paused) {
+                localStorage.setItem('musicTime', audio.currentTime);
+            }
+        });
+
+        // Solo reproducir en secciones del juego
+        const playSections = ['preguntas', 'resultadosPartidas', 'preguntasEvento', 'jugarPartidaSemanal', 'partidaEvento', 'resultadoEvento', 'resultadoTraduccion', 'traduccionJuego' ];
+
+        function handleMusic() {
+            const section = new URL(window.location.href).searchParams.get('section');
+            if (playSections.includes(section)) {
+                audio.play().catch(() => {
+                    const resume = () => {
+                        audio.play();
+                        document.removeEventListener('click', resume);
+                    };
+                    document.addEventListener('click', resume);
+                });
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }
+
+        // Detectar navegación
+        window.addEventListener('load', handleMusic);
+        window.addEventListener('popstate', handleMusic);
+
+        // Para navegación AJAX
+        if (typeof loadSection === 'function') {
+            const originalLoadSection = loadSection;
+            loadSection = async function(url, push = true) {
+                await originalLoadSection(url, push);
+                handleMusic();
+            };
+        }
+    }
+})();
+</script>
+
+
 <body>
 
-    <audio id="bg-music" loop>
+    <audio id="bg-music" autoplay loop>
         <source src="../core/musica/casa3.wav" type="audio/mpeg">
     </audio>
+
 
     <!-- Navbar Desktop -->
    <nav class="navbar-desktop">
@@ -433,11 +494,6 @@ $currentPage = $_GET['section'] ?? 'home';
         </ul>
 
         <div class="d-flex align-items-center gap-3">
-            <!-- 🔊 Botón de música -->
-            <button id="btnMusic" class="btn-music" title="Activar/desactivar música">
-                <i class="bi bi-volume-up-fill"></i>
-            </button>
-
             <div class="user-info">
                 <div class="user-avatar">
                     <?= strtoupper(substr($usuario['nombre'], 0, 1)) ?>
@@ -525,33 +581,59 @@ $currentPage = $_GET['section'] ?? 'home';
             }
         }, 3000);
 
-        // === 🎵 Control de música persistente ===
-        const music = document.getElementById('bg-music');
-        const btnMusic = document.getElementById('btnMusic');
-        let isMusicOn = localStorage.getItem('musicOn') === 'true';
+// === 🎵 Música persistente solo durante el juego ===
+const music = document.getElementById('bg-music');
+music.volume = 0.5;
 
-        music.volume = 0.5;
+// 🔹 Recuperar tiempo guardado (si existe)
+const savedTime = localStorage.getItem('musicTime');
+if (savedTime) {
+    music.currentTime = parseFloat(savedTime);
+}
 
+// 🔹 Saber si estamos en una sección donde debe sonar
+function shouldPlayMusic() {
+    const section = new URL(window.location.href).searchParams.get('section');
+    return ['preguntas', 'resultadosPartidas'].includes(section);
+}
 
-        function updateMusicState() {
-            if (isMusicOn) {
-                music.play().catch(()=>{});
-                btnMusic.classList.add('active');
-                btnMusic.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
-            } else {
-                music.pause();
-                btnMusic.classList.remove('active');
-                btnMusic.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
-            }
-            localStorage.setItem('musicOn', isMusicOn);
-        }
-
-        btnMusic.addEventListener('click', () => {
-            isMusicOn = !isMusicOn;
-            updateMusicState();
+// 🔹 Reproducir o detener según la sección
+function handleMusic() {
+    if (shouldPlayMusic()) {
+        music.play().catch(() => {
+            const enableMusic = () => {
+                music.play();
+                document.removeEventListener('click', enableMusic);
+            };
+            document.addEventListener('click', enableMusic);
         });
+    } else {
+        music.pause();
+        music.currentTime = 0;
+        localStorage.removeItem('musicTime');
+    }
+}
 
-        window.addEventListener('load', updateMusicState);
+// 🔹 Guardar el punto actual antes de recargar o cambiar de página
+window.addEventListener('beforeunload', () => {
+    if (!music.paused && shouldPlayMusic()) {
+        localStorage.setItem('musicTime', music.currentTime);
+    }
+});
+
+// 🔹 Limpieza si salimos del juego
+window.addEventListener('popstate', handleMusic);
+window.addEventListener('load', handleMusic);
+
+// Si usas AJAX (loadSection), asegúrate de volver a evaluar:
+if (typeof loadSection === 'function') {
+    const originalLoadSection = loadSection;
+    loadSection = async function(url, push = true) {
+        await originalLoadSection(url, push);
+        handleMusic();
+    };
+}
+
 
         // === ⚡ Carga AJAX de secciones (sin recargar la página) ===
         const mainContainer = document.getElementById('main-container');

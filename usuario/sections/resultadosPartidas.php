@@ -603,3 +603,10 @@ $porcentaje = ($aciertos / $totalPreguntas) * 100;
         </a>
     </div>
 </div>
+
+<?php
+// 🔹 Limpia resultados después de mostrarlos
+unset($_SESSION['resultados']);
+unset($_SESSION['indicePregunta']);
+?>
+
