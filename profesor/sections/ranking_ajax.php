@@ -15,6 +15,12 @@ $bd = new AccesoBD_Usuario();
 $centro = $_SESSION['user']['centro'];
 $clase = $_SESSION['user']['clase'];
 $sector = $_SESSION['user']['sector'];
+$rama = $bd->obtenerIdRamaPorSector($sector);
+
+//Por si acaso actualizarmos los rankings antes de mostrar nada
+$bd->actualizarRankingClase($centro, $clase);
+$bd->actualizarRankingSectores($centro, $sector);
+$bd->actualizarRanking($centro, $rama);
 
 $categoria = $_GET['categoria'] ?? 'ramas';
 

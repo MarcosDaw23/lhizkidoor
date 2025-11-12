@@ -20,3 +20,4 @@ if ($miEstadistica) {
 } else {
     echo "No hay estadísticas para este evento.";
 }
+?>

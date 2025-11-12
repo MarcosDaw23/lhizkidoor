@@ -3,7 +3,7 @@ class AccesoBD {
     const RUTA = "localhost";
     const BD = "lhizki"; 
     const USER = "root";
-    const PASS = "jp";
+    const PASS = "sanluis";
     public $conexion;
 
     function __construct() {

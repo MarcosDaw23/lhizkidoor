@@ -123,6 +123,53 @@ public function obtenerEventoPorId($eventoId) {
     return $result['nombre'] ?? 'Desconocido';
     }
 
+    public function eventoYaJugado($alumno) {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        $sql = "SELECT * FROM evento_ranking WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $alumno);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $existe = $result->num_rows > 0;
+
+        $db->cerrarConexion();
+        return $existe;
+    }
+
+
+    public function obtenerPuntuacionUser($idUser) {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        $sql = "SELECT puntuacionIndividual FROM user WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $idUser);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+
+        $db->cerrarConexion();
+        return $result ?? null;
+    }
+
+    public function obtenerIdRamaPorSector($sectorId) {
+        $db = new AccesoBD();
+        $conn = $db->conexion;
+
+        $sql = "SELECT r.id
+                FROM ramas r
+                INNER JOIN sectores s ON s.rama = r.id
+                WHERE s.id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $sectorId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+
+        $db->cerrarConexion();
+        return $result ?? null;
+    }
 
     public function obtenerRamaPorSector($sectorId) {
         $db = new AccesoBD();
@@ -504,21 +551,26 @@ public function obtenerRankingSectores($sector){
 public function actualizarRankingSectores($centro, $sector) {
     $db = new AccesoBD();
     $conn = $db->conexion;
+
     $sql = "UPDATE ranking_sectores
             SET puntuacionSector = (
-            SELECT SUM(u.puntuacionIndividual)
-            FROM user u
-                LEFT JOIN clases c ON u.clase = c.id
-                LEFT JOIN centro_sector cs ON cs.sector = c.sector
-                WHERE cs.sector = ?
+                SELECT SUM(u.puntuacionIndividual)
+                FROM user u
+                    LEFT JOIN clases c ON u.clase = c.id
+                    LEFT JOIN centro_sector cs ON cs.sector = c.sector
+                WHERE cs.centro = ? 
+                AND cs.sector = ?
+            )
             WHERE centro = ?
             AND sector = ?";
+
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iiii", $sector, $centro, $sector);
+    $stmt->bind_param("iiii", $centro, $sector, $centro, $sector);
     $stmt->execute();
 
     $db->cerrarConexion();
 }
+
 
 // 🔹 Obtener palabra aleatoria del glosario según la rama del usuario
 public function obtenerPalabraTraduccionPorUsuario($usuarioId) {

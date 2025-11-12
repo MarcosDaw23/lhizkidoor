@@ -10,6 +10,10 @@ if (!isset($_SESSION['user'])) {
 $usuarioId = $_SESSION['user']['id'];
 $action = $_GET['action'] ?? 'home';
 $bd = new AccesoBD_Usuario();
+$centro = $_SESSION['user']['centro'];
+$clase = $_SESSION['user']['clase'];
+$sector = $_SESSION['user']['sector'];
+$rama = $bd->obtenerIdRamaPorSector($sector);
 
 switch ($action) {
 
@@ -47,6 +51,10 @@ switch ($action) {
         if (!$idPalabra || !$opcion) {
             $_SESSION['mensaje'] = "Error al recibir los datos.";
             $_SESSION['tipo_mensaje'] = "danger";
+            $bd->actualizarRankingClase($centro, $clase);
+            $bd->actualizarRankingSectores($centro, $sector);
+            $bd->actualizarRanking($centro, $rama);
+            $_SESSION['puntuacion']=$bd->obtenerPuntuacionUser($usuarioId);
             header("Location: ../index.php");
             exit;
         }
