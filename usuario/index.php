@@ -386,8 +386,8 @@ $currentPage = $_GET['section'] ?? 'home';
                 padding-bottom: 0;
             }
         }
-        /* 🔊 Botón de música añadido */
-        .btn-music {
+
+         .btn-music {
             padding: 10px 14px;
             background: rgba(79, 172, 254, 0.15);
             border: 1px solid rgba(79, 172, 254, 0.4);
@@ -416,49 +416,111 @@ $currentPage = $_GET['section'] ?? 'home';
 
 <body>
 
-    <!-- 🎵 Reproductor persistente (nuevo) -->
     <audio id="bg-music" loop>
-        <source src="../core/musica/casa3.wav
-" type="audio/mpeg">
+        <source src="../core/musica/casa3.wav" type="audio/mpeg">
     </audio>
 
-
     <!-- Navbar Desktop -->
-    <nav class="navbar-desktop">
-        <div class="container">
-            <a href="./index.php" class="navbar-brand">
-                <i class="bi bi-mortarboard-fill"></i>
-                LHizki
+   <nav class="navbar-desktop">
+    <div class="container">
+        <a href="./index.php" class="navbar-brand">
+            <i class="bi bi-mortarboard-fill"></i>
+            LHizki
+        </a>
+
+        <ul class="navbar-menu">
+            <li>
+                <a href="./index.php" class="nav-link-custom <?= $currentPage === 'home' ? 'active' : '' ?>">
+                    <i class="bi bi-house-fill"></i>
+                    <span>Inicio</span>
+                </a>
+            </li>
+            <li>
+                <a href="./index.php?section=juegos" class="nav-link-custom <?= $currentPage === 'juegos' ? 'active' : '' ?>">
+                    <i class="bi bi-controller"></i>
+                    <span>Juegos</span>
+                </a>
+            </li>
+            <li>
+                <a href="./index.php?section=rankings" class="nav-link-custom">
+                    <i class="bi bi-trophy-fill"></i>
+                    <span>Rankings</span>
+                </a>
+            </li>
+            <li>
+                <a href="./controllers/obtenerGlosario_controller.php" class="nav-link-custom">
+                    <i class="bi bi-journal-text"></i>
+                    <span>Glosario</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-3">
+            <!-- 🔊 Botón de música -->
+            <button id="btnMusic" class="btn-music" title="Activar/desactivar música">
+                <i class="bi bi-volume-up-fill"></i>
+            </button>
+
+            <div class="user-info">
+                <div class="user-avatar">
+                    <?= strtoupper(substr($usuario['nombre'], 0, 1)) ?>
+                </div>
+                <span class="user-name"><?= htmlspecialchars($usuario['nombre']) ?></span>
+            </div>
+            <a href="../auth/controllers/logout_controller.php" class="btn-logout">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Salir</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+
+    <!-- Alertas -->
+    <?php if (isset($_SESSION['mensaje'])): ?>
+        <div class="alert alert-<?php echo $_SESSION['tipo_mensaje']; ?> alert-dismissible fade show" role="alert">
+            <?php echo htmlspecialchars($_SESSION['mensaje']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+        <?php
+            unset($_SESSION['mensaje']);
+            unset($_SESSION['tipo_mensaje']);
+        ?>
+    <?php endif; ?>
+
+    <!-- Contenido Principal -->
+    <main class="main-container">
+        <?php 
+            $view = "home"; 
+            if (isset($_GET['section'])) {
+                $view = $_GET['section'];
+            }
+
+            include "./sections/$view.php";
+        ?>
+    </main>
+
+    <!-- Barra de navegación inferior móvil -->
+    <nav class="mobile-bottom-nav">
+        <div class="mobile-nav-items">
+            <a href="./index.php" class="mobile-nav-item <?= $currentPage === 'home' ? 'active' : '' ?>">
+                <i class="bi bi-house-fill"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="./index.php?section=juegos" class="mobile-nav-item <?= $currentPage === 'juegos' ? 'active' : '' ?>">
+                <i class="bi bi-controller"></i>
+                <span>Juegos</span>
+            </a>
+            <a href="./index.php?section=rankings" class="mobile-nav-item <?= $currentPage === 'rankings' ? 'active' : '' ?>">
+                <i class="bi bi-trophy-fill"></i>
+                <span>Ranking</span>
+            </a>
+            <a href="./controllers/obtenerGlosario_controller.php" class="mobile-nav-item <?= $currentPage === 'verGlosario' ? 'active' : '' ?>">
+                <i class="bi bi-journal-text"></i>
+                <span>Glosario</span>
             </a>
 
-            <ul class="navbar-menu">
-                <li>
-                    <a href="./sections/home.php" class="nav-link-custom <?= $currentPage === 'home' ? 'active' : '' ?>">
-                        <i class="bi bi-house-fill"></i>
-                        <span>Inicio</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="./sections/juegos.php" class="nav-link-custom <?= $currentPage === 'juegos' ? 'active' : '' ?>">
-                        <i class="bi bi-controller"></i>
-                        <span>Juegos</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="./sections/rankings.php" class="nav-link-custom <?= $currentPage === 'rankings' ? 'active' : '' ?>">
-                        <i class="bi bi-trophy-fill"></i>
-                        <span>Rankings</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="./controllers/obtenerGlosario_controller.php" class="nav-link-custom">
-                        <i class="bi bi-journal-text"></i>
-                        <span>Glosario</span>
-                    </a>
-                </li>
-            </ul>
-
-            <div class="d-flex align-items-center gap-3">
+             <div class="d-flex align-items-center gap-3">
                 <!-- 🔊 Botón para música -->
                 <button id="btnMusic" class="btn-music" title="Activar/desactivar música">
                     <i class="bi bi-volume-up-fill"></i>
@@ -475,51 +537,7 @@ $currentPage = $_GET['section'] ?? 'home';
                     <span>Salir</span>
                 </a>
             </div>
-        </div>
-    </nav>
 
-    <!-- Alertas -->
-    <?php if (isset($_SESSION['mensaje'])): ?>
-        <div class="alert alert-<?php echo $_SESSION['tipo_mensaje']; ?> alert-dismissible fade show" role="alert">
-            <?php echo htmlspecialchars($_SESSION['mensaje']); ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-        </div>
-        <?php
-            unset($_SESSION['mensaje']);
-            unset($_SESSION['tipo_mensaje']);
-        ?>
-    <?php endif; ?>
-
-    <!-- Contenido Principal -->
-    <main id="main-container" class="main-container">
-        <?php 
-            $view = "home"; 
-            if (isset($_GET['section'])) {
-                $view = $_GET['section'];
-            }
-            include "./sections/$view.php";
-        ?>
-    </main>
-
-    <!-- Barra de navegación inferior móvil -->
-    <nav class="mobile-bottom-nav">
-        <div class="mobile-nav-items">
-            <a href="./sections/home.php" class="mobile-nav-item <?= $currentPage === 'home' ? 'active' : '' ?>">
-                <i class="bi bi-house-fill"></i>
-                <span>Inicio</span>
-            </a>
-            <a href="./sections/juegos.php" class="mobile-nav-item <?= $currentPage === 'juegos' ? 'active' : '' ?>">
-                <i class="bi bi-controller"></i>
-                <span>Juegos</span>
-            </a>
-            <a href="./sections/rankings.php" class="mobile-nav-item <?= $currentPage === 'rankings' ? 'active' : '' ?>">
-                <i class="bi bi-trophy-fill"></i>
-                <span>Ranking</span>
-            </a>
-            <a href="./controllers/obtenerGlosario_controller.php" class="mobile-nav-item <?= $currentPage === 'verGlosario' ? 'active' : '' ?>">
-                <i class="bi bi-journal-text"></i>
-                <span>Glosario</span>
-            </a>
             <a href="../auth/controllers/logout_controller.php" class="mobile-nav-item">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Salir</span>
@@ -528,8 +546,18 @@ $currentPage = $_GET['section'] ?? 'home';
     </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
+        // Auto cerrar alertas después de 3 segundos
+        setTimeout(() => {
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 3000);
+    </script>
+
+     <script>
         // Auto cerrar alertas después de 3 segundos
         setTimeout(() => {
             const alert = document.querySelector('.alert');
@@ -600,6 +628,7 @@ $currentPage = $_GET['section'] ?? 'home';
             if (e.state?.url) loadSection(e.state.url, false);
         });
     </script>
+    
 </body>
 </html>
 <?php ob_end_flush(); ?>
