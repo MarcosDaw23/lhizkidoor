@@ -386,95 +386,59 @@ $currentPage = $_GET['section'] ?? 'home';
                 padding-bottom: 0;
             }
         }
-
-         .btn-music {
-            padding: 10px 14px;
-            background: rgba(79, 172, 254, 0.15);
-            border: 1px solid rgba(79, 172, 254, 0.4);
-            color: #4facfe;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-music:hover {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-
-        /* Animación cuando está activa */
-        .btn-music.active i {
-            animation: pulseSound 1.5s infinite;
-        }
-
-        @keyframes pulseSound {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-        }
     </style>
 </head>
 
 <body>
-
-    <audio id="bg-music" loop>
-        <source src="../core/musica/casa3.wav" type="audio/mpeg">
-    </audio>
-
     <!-- Navbar Desktop -->
-   <nav class="navbar-desktop">
-    <div class="container">
-        <a href="./index.php" class="navbar-brand">
-            <i class="bi bi-mortarboard-fill"></i>
-            LHizki
-        </a>
-
-        <ul class="navbar-menu">
-            <li>
-                <a href="./index.php" class="nav-link-custom <?= $currentPage === 'home' ? 'active' : '' ?>">
-                    <i class="bi bi-house-fill"></i>
-                    <span>Inicio</span>
-                </a>
-            </li>
-            <li>
-                <a href="./index.php?section=juegos" class="nav-link-custom <?= $currentPage === 'juegos' ? 'active' : '' ?>">
-                    <i class="bi bi-controller"></i>
-                    <span>Juegos</span>
-                </a>
-            </li>
-            <li>
-                <a href="./index.php?section=rankings" class="nav-link-custom">
-                    <i class="bi bi-trophy-fill"></i>
-                    <span>Rankings</span>
-                </a>
-            </li>
-            <li>
-                <a href="./controllers/obtenerGlosario_controller.php" class="nav-link-custom">
-                    <i class="bi bi-journal-text"></i>
-                    <span>Glosario</span>
-                </a>
-            </li>
-        </ul>
-
-        <div class="d-flex align-items-center gap-3">
-            <!-- 🔊 Botón de música -->
-            <button id="btnMusic" class="btn-music" title="Activar/desactivar música">
-                <i class="bi bi-volume-up-fill"></i>
-            </button>
-
-            <div class="user-info">
-                <div class="user-avatar">
-                    <?= strtoupper(substr($usuario['nombre'], 0, 1)) ?>
-                </div>
-                <span class="user-name"><?= htmlspecialchars($usuario['nombre']) ?></span>
-            </div>
-            <a href="../auth/controllers/logout_controller.php" class="btn-logout">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Salir</span>
+    <nav class="navbar-desktop">
+        <div class="container">
+            <a href="./index.php" class="navbar-brand">
+                <i class="bi bi-mortarboard-fill"></i>
+                LHizki
             </a>
-        </div>
-    </div>
-</nav>
 
+            <ul class="navbar-menu">
+                <li>
+                    <a href="./index.php" class="nav-link-custom <?= $currentPage === 'home' ? 'active' : '' ?>">
+                        <i class="bi bi-house-fill"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./index.php?section=juegos" class="nav-link-custom <?= $currentPage === 'juegos' ? 'active' : '' ?>">
+                        <i class="bi bi-controller"></i>
+                        <span>Juegos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./index.php?section=rankings" class="nav-link-custom">
+                        <i class="bi bi-trophy-fill"></i>
+                        <span>Rankings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./controllers/obtenerGlosario_controller.php" class="nav-link-custom">
+                        <i class="bi bi-journal-text"></i>
+                        <span>Glosario</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <?= strtoupper(substr($usuario['nombre'], 0, 1)) ?>
+                    </div>
+                    <span class="user-name"><?= htmlspecialchars($usuario['nombre']) ?></span>
+                </div>
+                <a href="../auth/controllers/logout_controller.php" class="btn-logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Salir</span>
+                </a>
+            </div>
+        </div>
+    </nav>
 
     <!-- Alertas -->
     <?php if (isset($_SESSION['mensaje'])): ?>
@@ -519,25 +483,6 @@ $currentPage = $_GET['section'] ?? 'home';
                 <i class="bi bi-journal-text"></i>
                 <span>Glosario</span>
             </a>
-
-             <div class="d-flex align-items-center gap-3">
-                <!-- 🔊 Botón para música -->
-                <button id="btnMusic" class="btn-music" title="Activar/desactivar música">
-                    <i class="bi bi-volume-up-fill"></i>
-                </button>
-
-                <div class="user-info">
-                    <div class="user-avatar">
-                        <?= strtoupper(substr($usuario['nombre'], 0, 1)) ?>
-                    </div>
-                    <span class="user-name"><?= htmlspecialchars($usuario['nombre']) ?></span>
-                </div>
-                <a href="../auth/controllers/logout_controller.php" class="btn-logout">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Salir</span>
-                </a>
-            </div>
-
             <a href="../auth/controllers/logout_controller.php" class="mobile-nav-item">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Salir</span>
@@ -555,78 +500,6 @@ $currentPage = $_GET['section'] ?? 'home';
                 bsAlert.close();
             }
         }, 3000);
-    </script>
-
-     <script>
-        // Auto cerrar alertas después de 3 segundos
-        setTimeout(() => {
-            const alert = document.querySelector('.alert');
-            if (alert) {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            }
-        }, 3000);
-
-        // === 🎵 Control de música persistente ===
-        const music = document.getElementById('bg-music');
-        const btnMusic = document.getElementById('btnMusic');
-        let isMusicOn = localStorage.getItem('musicOn') === 'true';
-
-        music.volume = 0.5;
-
-
-        function updateMusicState() {
-            if (isMusicOn) {
-                music.play().catch(()=>{});
-                btnMusic.classList.add('active');
-                btnMusic.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
-            } else {
-                music.pause();
-                btnMusic.classList.remove('active');
-                btnMusic.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
-            }
-            localStorage.setItem('musicOn', isMusicOn);
-        }
-
-        btnMusic.addEventListener('click', () => {
-            isMusicOn = !isMusicOn;
-            updateMusicState();
-        });
-
-        window.addEventListener('load', updateMusicState);
-
-        // === ⚡ Carga AJAX de secciones (sin recargar la página) ===
-        const mainContainer = document.getElementById('main-container');
-        const navLinks = document.querySelectorAll('.nav-link-custom, .mobile-nav-item');
-
-        async function loadSection(url, push = true) {
-            try {
-                const response = await fetch(url);
-                const html = await response.text();
-                mainContainer.innerHTML = html;
-                if (push) window.history.pushState({url}, '', url);
-
-                navLinks.forEach(link => {
-                    link.classList.toggle('active', link.getAttribute('href') === url);
-                });
-            } catch (error) {
-                mainContainer.innerHTML = '<div class="alert alert-danger text-center mt-4">Error al cargar la sección.</div>';
-            }
-        }
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', e => {
-                const url = link.getAttribute('href');
-                if (url.includes('./sections/') && !url.includes('controller')) {
-                    e.preventDefault();
-                    loadSection(url);
-                }
-            });
-        });
-
-        window.addEventListener('popstate', e => {
-            if (e.state?.url) loadSection(e.state.url, false);
-        });
     </script>
     
 </body>
