@@ -298,24 +298,31 @@ public function obtenerEventoPorId($eventoId) {
         return $palabra;
     }
 
-    public function obtenerPreguntas() {
-        $db = new AccesoBD();
-        $conn = $db->conexion;
+    public function obtenerPreguntas($rama) {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
 
-        $sql = "SELECT id, cast, eusk1, eusk2, eusk3, ondo, definicion
-                FROM diccionario
-                ORDER BY RAND()
-                LIMIT 10";
-        $result = $conn->query($sql);
+    // Consulta preparada con parámetro
+    $sql = "SELECT id, cast, eusk1, eusk2, eusk3, ondo, definicion
+            FROM diccionario
+            WHERE rama = ?
+            ORDER BY RAND()
+            LIMIT 10";
 
-        $preguntas = [];
-        while ($row = $result->fetch_assoc()) {
-            $preguntas[] = $row;
-        }
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $rama);  // usar $rama recibido
+    $stmt->execute();
+    $result = $stmt->get_result();  // obtener el resultado
 
-        $db->cerrarConexion();
-        return $preguntas;
+    $preguntas = [];
+    while ($row = $result->fetch_assoc()) {
+        $preguntas[] = $row;
     }
+
+    $db->cerrarConexion();
+    return $preguntas;
+}
+
 
     public function obtenerPartidaSemanaActual() {
         $db = new AccesoBD();

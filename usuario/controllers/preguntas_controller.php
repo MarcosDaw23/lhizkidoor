@@ -10,11 +10,12 @@ if (!isset($_SESSION['user'])) {
 $bd = new AccesoBD_Usuario();
 $usuarioId = $_SESSION['user']['id'];
 $action = $_GET['action'] ?? 'start';
+$rama = $bd->obtenerIdRamaPorSector($_SESSION['user']['sector']);
 
 switch ($action) {
 
  case 'start':
-    $_SESSION['preguntas'] = $bd->obtenerPreguntas();
+    $_SESSION['preguntas'] = $bd->obtenerPreguntas($rama);
     $_SESSION['indicePregunta'] = 0;
     $_SESSION['puntuacion'] = 0;
     $_SESSION['modo'] = 'normal';
