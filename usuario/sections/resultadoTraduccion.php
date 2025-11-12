@@ -14,7 +14,6 @@ if (!$datos) {
         <h2 class="mb-4"><?= $datos['resultado']; ?></h2>
         <p><strong>Tu respuesta:</strong> <?= htmlspecialchars($datos['tu_respuesta']); ?></p>
         <p><strong>Respuesta correcta:</strong> <?= htmlspecialchars($datos['correcta']); ?></p>
-        <h3 class="mt-4 text-success">Puntuación obtenida: <?= $datos['puntuacion']; ?> puntos</h3>
 
         <a href="./index.php?section=traduccionJuego" class="btn btn-primary mt-4">Jugar otra vez</a>
         <a href="./index.php?section=juegos" class="btn btn-primary mt-4">Volver</a>

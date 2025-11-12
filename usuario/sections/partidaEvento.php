@@ -7,8 +7,9 @@ if (!isset($_SESSION['user'])) {
 }
 $bd = new AccesoBD_Usuario();
 $jugado = $bd->eventoYaJugado($_SESSION['user']['nombre']);
+$rama = $bd->obtenerIdRamaPorSector($_SESSION['user']['sector']);
 
-if($jugado=true){
+if($jugado===true){
   header("Location: index.php?section=resultadosPartidas");
   exit;
 }
@@ -25,7 +26,7 @@ if (!$evento) {
   exit;
 }
 
-$preguntas = $bd->obtenerPreguntasEvento($evento['num_preguntas']);
+$preguntas = $bd->obtenerPreguntasEvento($rama, $evento['num_preguntas']);
 
 $_SESSION['modo'] = 'evento';
 $_SESSION['evento_id'] = $eventoId;

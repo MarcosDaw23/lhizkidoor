@@ -10,8 +10,8 @@ if (!$usuarioId) {
     header("Location: ../index.php?section=login");
     exit;
 }
-
-$palabra = $bd->obtenerPalabraTraduccionPorUsuario($usuarioId);
+$rama = $bd->obtenerIdRamaPorSector($_SESSION['user']['sector']);
+$palabra = $bd->obtenerPalabraTraduccionPorUsuario($rama);
 
 if (!$palabra) {
     echo "<div class='alert alert-warning text-center mt-5'>

@@ -93,12 +93,12 @@ public function obtenerEventoPorId($eventoId) {
     return $res;
     }
 
-    public function obtenerPreguntasEvento($cantidad) {
+    public function obtenerPreguntasEvento($rama, $cantidad) {
         $db = new AccesoBD();
         $conn = $db->conexion;
-        $sql = "SELECT * FROM diccionario ORDER BY RAND() LIMIT ?";
+        $sql = "SELECT * FROM diccionario WHERE rama = ? ORDER BY RAND() LIMIT ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $cantidad);
+        $stmt->bind_param("ii", $rama, $cantidad);
         $stmt->execute();
         $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         $db->cerrarConexion();
@@ -127,7 +127,7 @@ public function obtenerEventoPorId($eventoId) {
         $db = new AccesoBD();
         $conn = $db->conexion;
 
-        $sql = "SELECT * FROM evento_ranking WHERE id = ?";
+        $sql = "SELECT * FROM evento_ranking WHERE alumno = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $alumno);
         $stmt->execute();
@@ -573,20 +573,14 @@ public function actualizarRankingSectores($centro, $sector) {
 
 
 // 🔹 Obtener palabra aleatoria del glosario según la rama del usuario
-public function obtenerPalabraTraduccionPorUsuario($usuarioId) {
+public function obtenerPalabraTraduccionPorUsuario($rama) {
     $db = new AccesoBD();
     $conn = $db->conexion;
 
-    $sql = "SELECT g.id, g.cast, g.eusk, g.definicion
-            FROM glosario g
-            INNER JOIN sectores s ON g.rama = s.rama
-            INNER JOIN user u ON u.sector = s.id
-            WHERE u.id = ?
-            ORDER BY RAND()
-            LIMIT 1";
+    $sql = "SELECT * FROM glosario WHERE rama = ? ORDER BY RAND() LIMIT 1";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $usuarioId);
+    $stmt->bind_param("i", $rama);
     $stmt->execute();
     $res = $stmt->get_result()->fetch_assoc();
 
