@@ -386,43 +386,10 @@ $currentPage = $_GET['section'] ?? 'home';
                 padding-bottom: 0;
             }
         }
-        /* 🔊 Botón de música añadido */
-        .btn-music {
-            padding: 10px 14px;
-            background: rgba(79, 172, 254, 0.15);
-            border: 1px solid rgba(79, 172, 254, 0.4);
-            color: #4facfe;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-music:hover {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-
-        /* Animación cuando está activa */
-        .btn-music.active i {
-            animation: pulseSound 1.5s infinite;
-        }
-
-        @keyframes pulseSound {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-        }
     </style>
 </head>
 
 <body>
-
-    <!-- 🎵 Reproductor persistente (nuevo) -->
-    <audio id="bg-music" loop>
-        <source src="../core/musica/casa3.wav
-" type="audio/mpeg">
-    </audio>
-
-
     <!-- Navbar Desktop -->
     <nav class="navbar-desktop">
         <div class="container">
@@ -433,19 +400,19 @@ $currentPage = $_GET['section'] ?? 'home';
 
             <ul class="navbar-menu">
                 <li>
-                    <a href="./sections/home.php" class="nav-link-custom <?= $currentPage === 'home' ? 'active' : '' ?>">
+                    <a href="./index.php" class="nav-link-custom <?= $currentPage === 'home' ? 'active' : '' ?>">
                         <i class="bi bi-house-fill"></i>
                         <span>Inicio</span>
                     </a>
                 </li>
                 <li>
-                    <a href="./sections/juegos.php" class="nav-link-custom <?= $currentPage === 'juegos' ? 'active' : '' ?>">
+                    <a href="./index.php?section=juegos" class="nav-link-custom <?= $currentPage === 'juegos' ? 'active' : '' ?>">
                         <i class="bi bi-controller"></i>
                         <span>Juegos</span>
                     </a>
                 </li>
                 <li>
-                    <a href="./sections/rankings.php" class="nav-link-custom <?= $currentPage === 'rankings' ? 'active' : '' ?>">
+                    <a href="./index.php?section=rankings" class="nav-link-custom">
                         <i class="bi bi-trophy-fill"></i>
                         <span>Rankings</span>
                     </a>
@@ -459,11 +426,6 @@ $currentPage = $_GET['section'] ?? 'home';
             </ul>
 
             <div class="d-flex align-items-center gap-3">
-                <!-- 🔊 Botón para música -->
-                <button id="btnMusic" class="btn-music" title="Activar/desactivar música">
-                    <i class="bi bi-volume-up-fill"></i>
-                </button>
-
                 <div class="user-info">
                     <div class="user-avatar">
                         <?= strtoupper(substr($usuario['nombre'], 0, 1)) ?>
@@ -491,12 +453,13 @@ $currentPage = $_GET['section'] ?? 'home';
     <?php endif; ?>
 
     <!-- Contenido Principal -->
-    <main id="main-container" class="main-container">
+    <main class="main-container">
         <?php 
             $view = "home"; 
             if (isset($_GET['section'])) {
                 $view = $_GET['section'];
             }
+
             include "./sections/$view.php";
         ?>
     </main>
@@ -504,15 +467,15 @@ $currentPage = $_GET['section'] ?? 'home';
     <!-- Barra de navegación inferior móvil -->
     <nav class="mobile-bottom-nav">
         <div class="mobile-nav-items">
-            <a href="./sections/home.php" class="mobile-nav-item <?= $currentPage === 'home' ? 'active' : '' ?>">
+            <a href="./index.php" class="mobile-nav-item <?= $currentPage === 'home' ? 'active' : '' ?>">
                 <i class="bi bi-house-fill"></i>
                 <span>Inicio</span>
             </a>
-            <a href="./sections/juegos.php" class="mobile-nav-item <?= $currentPage === 'juegos' ? 'active' : '' ?>">
+            <a href="./index.php?section=juegos" class="mobile-nav-item <?= $currentPage === 'juegos' ? 'active' : '' ?>">
                 <i class="bi bi-controller"></i>
                 <span>Juegos</span>
             </a>
-            <a href="./sections/rankings.php" class="mobile-nav-item <?= $currentPage === 'rankings' ? 'active' : '' ?>">
+            <a href="./index.php?section=rankings" class="mobile-nav-item <?= $currentPage === 'rankings' ? 'active' : '' ?>">
                 <i class="bi bi-trophy-fill"></i>
                 <span>Ranking</span>
             </a>
@@ -528,7 +491,6 @@ $currentPage = $_GET['section'] ?? 'home';
     </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
         // Auto cerrar alertas después de 3 segundos
         setTimeout(() => {
@@ -538,68 +500,8 @@ $currentPage = $_GET['section'] ?? 'home';
                 bsAlert.close();
             }
         }, 3000);
-
-        // === 🎵 Control de música persistente ===
-        const music = document.getElementById('bg-music');
-        const btnMusic = document.getElementById('btnMusic');
-        let isMusicOn = localStorage.getItem('musicOn') === 'true';
-
-        music.volume = 0.5;
-
-
-        function updateMusicState() {
-            if (isMusicOn) {
-                music.play().catch(()=>{});
-                btnMusic.classList.add('active');
-                btnMusic.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
-            } else {
-                music.pause();
-                btnMusic.classList.remove('active');
-                btnMusic.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
-            }
-            localStorage.setItem('musicOn', isMusicOn);
-        }
-
-        btnMusic.addEventListener('click', () => {
-            isMusicOn = !isMusicOn;
-            updateMusicState();
-        });
-
-        window.addEventListener('load', updateMusicState);
-
-        // === ⚡ Carga AJAX de secciones (sin recargar la página) ===
-        const mainContainer = document.getElementById('main-container');
-        const navLinks = document.querySelectorAll('.nav-link-custom, .mobile-nav-item');
-
-        async function loadSection(url, push = true) {
-            try {
-                const response = await fetch(url);
-                const html = await response.text();
-                mainContainer.innerHTML = html;
-                if (push) window.history.pushState({url}, '', url);
-
-                navLinks.forEach(link => {
-                    link.classList.toggle('active', link.getAttribute('href') === url);
-                });
-            } catch (error) {
-                mainContainer.innerHTML = '<div class="alert alert-danger text-center mt-4">Error al cargar la sección.</div>';
-            }
-        }
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', e => {
-                const url = link.getAttribute('href');
-                if (url.includes('./sections/') && !url.includes('controller')) {
-                    e.preventDefault();
-                    loadSection(url);
-                }
-            });
-        });
-
-        window.addEventListener('popstate', e => {
-            if (e.state?.url) loadSection(e.state.url, false);
-        });
     </script>
+    
 </body>
 </html>
 <?php ob_end_flush(); ?>
