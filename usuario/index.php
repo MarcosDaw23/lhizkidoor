@@ -387,30 +387,7 @@ $currentPage = $_GET['section'] ?? 'home';
             }
         }
 
-         .btn-music {
-            padding: 10px 14px;
-            background: rgba(79, 172, 254, 0.15);
-            border: 1px solid rgba(79, 172, 254, 0.4);
-            color: #4facfe;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-music:hover {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-
-        /* Animación cuando está activa */
-        .btn-music.active i {
-            animation: pulseSound 1.5s infinite;
-        }
-
-        @keyframes pulseSound {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-        }
+       
     </style>
 </head>
 
@@ -519,25 +496,6 @@ $currentPage = $_GET['section'] ?? 'home';
                 <i class="bi bi-journal-text"></i>
                 <span>Glosario</span>
             </a>
-
-             <div class="d-flex align-items-center gap-3">
-                <!-- 🔊 Botón para música -->
-                <button id="btnMusic" class="btn-music" title="Activar/desactivar música">
-                    <i class="bi bi-volume-up-fill"></i>
-                </button>
-
-                <div class="user-info">
-                    <div class="user-avatar">
-                        <?= strtoupper(substr($usuario['nombre'], 0, 1)) ?>
-                    </div>
-                    <span class="user-name"><?= htmlspecialchars($usuario['nombre']) ?></span>
-                </div>
-                <a href="../auth/controllers/logout_controller.php" class="btn-logout">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Salir</span>
-                </a>
-            </div>
-
             <a href="../auth/controllers/logout_controller.php" class="mobile-nav-item">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Salir</span>
