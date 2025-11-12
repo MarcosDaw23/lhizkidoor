@@ -472,7 +472,7 @@ public function obtenerRankingClaseIndividual($centro){
     $sql = "SELECT u.nombre AS usuario, c.nombre AS clase, u.puntuacionIndividual
             FROM user u
             INNER JOIN clases c ON u.clase = c.id
-            WHERE u.centro = ?
+            WHERE u.centro = ? AND u.rol = 3
             ORDER BY u.puntuacionIndividual DESC";
 
     $stmt = $conn->prepare($sql);
