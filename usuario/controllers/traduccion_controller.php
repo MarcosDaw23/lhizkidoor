@@ -18,19 +18,11 @@ $palabra = $bd->obtenerPalabraPorId($idPalabra);
 
 // Comparar respuesta
 $correcta = strtolower(trim($palabra['cast']));
-$puntuacion = ($respuesta === $correcta) ? 10 : 0;
-
-// Registrar puntuación si acierta
-if ($puntuacion > 0) {
-    $partidaId = $bd->obtenerPartidaSemanaActual();
-    $bd->registrarPartidaUsuario($usuarioId, $partidaId, $puntuacion);
-}
 
 $_SESSION['resultado_traduccion'] = [
     'correcta' => $palabra['cast'],
     'tu_respuesta' => $respuesta,
     'resultado' => $respuesta === $correcta ? '✅ ¡Correcto!' : '❌ Incorrecto',
-    'puntuacion' => $puntuacion
 ];
 
 header("Location: ../index.php?section=resultadoTraduccion");
