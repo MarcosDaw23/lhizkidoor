@@ -489,18 +489,18 @@ public function obtenerRankingClaseIndividual($centro){
     return $ranking;
 }
 
-public function obtenerRankingClases($clase){
+public function obtenerRankingClases($centro){
     $db = new AccesoBD();
     $conn = $db->conexion;
 
     $sql = "SELECT c.nombre AS clase, ranking_clases.puntuacionClase
             FROM ranking_clases
             INNER JOIN clases c ON ranking_clases.clase = c.id
-            WHERE ranking_clases.clase = ?
+            WHERE ranking_clases.centro = ?
             ORDER BY ranking_clases.puntuacionClase DESC;";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $clase);
+    $stmt->bind_param("i", $centro);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -608,6 +608,81 @@ public function obtenerPalabraPorId($idPalabra) {
 
     $db->cerrarConexion();
     return $res;
+}
+
+// 🔹 Obtener centros
+public function obtenerCentros() {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT id, nombre FROM centro ORDER BY nombre ASC";
+    $result = $conn->query($sql);
+
+    $centros = [];
+    while ($row = $result->fetch_assoc()) {
+        $centros[] = $row;
+    }
+
+    $db->cerrarConexion();
+    return $centros;
+}
+
+// 🔹 Obtener sectores
+public function obtenerSectores() {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT id, nombre FROM sectores ORDER BY nombre ASC";
+    $result = $conn->query($sql);
+
+    $sectores = [];
+    while ($row = $result->fetch_assoc()) {
+        $sectores[] = $row;
+    }
+
+    $db->cerrarConexion();
+    return $sectores;
+}
+
+// 🔹 Obtener clases
+public function obtenerClases() {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "SELECT id, nombre FROM clases ORDER BY nombre ASC";
+    $result = $conn->query($sql);
+
+    $clases = [];
+    while ($row = $result->fetch_assoc()) {
+        $clases[] = $row;
+    }
+
+    $db->cerrarConexion();
+    return $clases;
+}
+
+// 🔹 Actualizar perfil de usuario
+public function actualizarPerfil($id, $nombre, $apellido, $mail, $centro, $sector, $clase, $nueva_password = '') {
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    // Si se proporciona nueva contraseña, actualizarla también
+    if (!empty($nueva_password)) {
+        $password_hash = password_hash($nueva_password, PASSWORD_DEFAULT);
+        $sql = "UPDATE user SET nombre = ?, apellido = ?, mail = ?, centro = ?, sector = ?, clase = ?, password = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssiiisi", $nombre, $apellido, $mail, $centro, $sector, $clase, $password_hash, $id);
+    } else {
+        $sql = "UPDATE user SET nombre = ?, apellido = ?, mail = ?, centro = ?, sector = ?, clase = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssiiii", $nombre, $apellido, $mail, $centro, $sector, $clase, $id);
+    }
+    
+    $resultado = $stmt->execute();
+
+    $stmt->close();
+    $db->cerrarConexion();
+    return $resultado;
 }
 
 

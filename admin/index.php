@@ -54,10 +54,6 @@ $usuario = $_SESSION['user'];
           <i class="bi bi-person-plus"></i>
           <span>Crear Profesor</span>
         </a>
-        <a href="./control/obtenerEstadisticas_controller.php" class="menu-item <?php echo (isset($_GET['section']) && $_GET['section'] === 'estadisticas') ? 'active' : ''; ?>">
-          <i class="bi bi-bar-chart"></i>
-          <span>Estadísticas</span>
-        </a>
         </nav>
 
          <div class="sidebar-footer">

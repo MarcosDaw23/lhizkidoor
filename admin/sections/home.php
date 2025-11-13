@@ -10,12 +10,15 @@ $usuario = $_SESSION['user'];
 
 require_once __DIR__ . '/../models/AccesoBD_class.php';
 $usuarioModel = new AccesoBD_Admin();
-$usuarios = $usuarioModel->obtenerUsuarios();
-$totalUsuarios = count($usuarios);
+$todosLosUsuarios = $usuarioModel->obtenerUsuarios();
+$totalUsuarios = count($todosLosUsuarios);
+
+// Obtener solo los 6 usuarios más recientes
+$usuarios = array_slice($todosLosUsuarios, 0, 6);
 
 
 $totalProfesores = 0;
-foreach ($usuarios as $u) {
+foreach ($todosLosUsuarios as $u) {
     if (isset($u['rol']) && $u['rol'] == 2) { 
         $totalProfesores++;
     }

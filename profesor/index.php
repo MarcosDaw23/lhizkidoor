@@ -39,26 +39,29 @@ $usuario = $_SESSION['user'];
         </div>
 
         <nav class="sidebar-menu">
+          <?php 
+            $currentSection = $_GET['section'] ?? 'home';
+          ?>
           <div class="menu-section-title">Principal</div>
-          <a href="./index.php" class="menu-item active">
+          <a href="./index.php" class="menu-item <?= ($currentSection === 'home') ? 'active' : '' ?>">
             <i class="bi bi-speedometer2"></i>
             <span>Dashboard</span>
           </a>
 
           <div class="menu-section-title">Gestión</div>
-          <a href="controllers/obtenerGlosario_controller.php" class="menu-item">
+          <a href="controllers/obtenerGlosario_controller.php" class="menu-item <?= ($currentSection === 'VerGlosario' || $currentSection === 'verGlosario') ? 'active' : '' ?>">
             <i class="bi bi-book-half"></i>
             <span>Glosario</span>
           </a>
-          <a href="index.php?section=crearEventos" class="menu-item">
+          <a href="index.php?section=crearEventos" class="menu-item <?= ($currentSection === 'crearEventos') ? 'active' : '' ?>">
             <i class="bi bi-joystick"></i>
             <span>Crear eventos</span>
           </a>
-          <a href="index.php?section=rankings" class="menu-item">
+          <a href="index.php?section=rankings" class="menu-item <?= ($currentSection === 'rankings') ? 'active' : '' ?>">
             <i class="bi bi-trophy"></i>
             <span>Ranking</span>
           </a>
-          <a href="index.php?section=Estadisticas" class="menu-item">
+          <a href="index.php?section=Estadisticas" class="menu-item <?= ($currentSection === 'Estadisticas') ? 'active' : '' ?>">
             <i class="bi bi-bar-chart"></i>
             <span>Estadisticas</span>
           </a>

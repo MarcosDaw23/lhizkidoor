@@ -307,6 +307,43 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
         text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
     }
 
+    .greeting-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        position: relative;
+    }
+
+    .settings-icon-mobile {
+        display: none;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        text-decoration: none;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 18px;
+    }
+
+    .settings-icon-mobile:hover {
+        transform: translateY(-3px) rotate(45deg);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .settings-icon-mobile i {
+        transition: transform 0.3s ease;
+    }
+
     @media (max-width: 768px) {
         .hero-section {
             padding: 50px 30px;
@@ -314,6 +351,14 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
 
         .hero-greeting {
             font-size: 2.5rem;
+        }
+
+        .greeting-container {
+            flex-wrap: wrap;
+        }
+
+        .settings-icon-mobile {
+            display: flex;
         }
 
         .hero-subtitle {
@@ -332,16 +377,21 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
 </style>
 
 <div class="hero-section">
-    <h1 class="hero-greeting">
-        ¡Kaixo, <?= htmlspecialchars($nombreUsuario) ?>!
-    </h1>
+    <div class="greeting-container">
+        <h1 class="hero-greeting">
+            ¡Kaixo, <?= htmlspecialchars($nombreUsuario) ?>!
+        </h1>
+        <a href="./index.php?section=perfil" class="settings-icon-mobile" title="Configuración">
+            <i class="bi bi-gear-fill"></i>
+        </a>
+    </div>
 
   <?php if (!$yaJugo): ?>
         <div class="status-badge warning">
             <i class="bi bi-exclamation-circle-fill"></i>
             <span>Aún no has jugado esta semana</span>
         </div>
-        
+
         <p class="hero-subtitle">
             Pon a prueba tus conocimientos de euskera técnico<br>
             ¡Demuestra lo que sabes y escala en el ranking!
@@ -356,7 +406,7 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
             <i class="bi bi-check-circle-fill"></i>
             <span>Ya completaste la partida de esta semana</span>
         </div>
-        
+
         <p class="hero-subtitle">
             ¡Excelente trabajo! Ya jugaste esta semana<br>
             Puedes repasar o explorar otras secciones

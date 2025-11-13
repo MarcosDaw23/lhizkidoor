@@ -36,13 +36,16 @@ switch ($categoria) {
             echo '</div>';
         } else {
             echo '<table class="ranking-table">';
-            echo '<thead><tr><th>Familia Formativa</th><th>Puntuación</th></tr></thead>';
+            echo '<thead><tr><th>Posición</th><th>Familia Formativa</th><th>Puntuación</th></tr></thead>';
             echo '<tbody>';
+            $posicion = 1;
             foreach ($datos as $fila) {
                 echo '<tr>';
+                echo '<td><div class="ranking-position"><span class="position-number">' . $posicion . '</span></div></td>';
                 echo '<td>' . htmlspecialchars($fila['rama']) . '</td>';
                 echo '<td><span class="score-badge"><i class="bi bi-star-fill"></i> ' . htmlspecialchars($fila['puntuacionRanking']) . '</span></td>';
                 echo '</tr>';
+                $posicion++;
             }
             echo '</tbody></table>';
         }
@@ -59,20 +62,23 @@ switch ($categoria) {
             echo '</div>';
         } else {
             echo '<table class="ranking-table">';
-            echo '<thead><tr><th>Grado</th><th>Puntuación</th></tr></thead>';
+            echo '<thead><tr><th>Posición</th><th>Grado</th><th>Puntuación</th></tr></thead>';
             echo '<tbody>';
+            $posicion = 1;
             foreach ($datos as $fila) {
                 echo '<tr>';
+                echo '<td><div class="ranking-position"><span class="position-number">' . $posicion . '</span></div></td>';
                 echo '<td>' . htmlspecialchars($fila['sector']) . '</td>';
                 echo '<td><span class="score-badge"><i class="bi bi-star-fill"></i> ' . htmlspecialchars($fila['puntuacionSector']) . '</span></td>';
                 echo '</tr>';
+                $posicion++;
             }
             echo '</tbody></table>';
         }
         break;
         
     case 'clases':
-        $datos = $bd->obtenerRankingClases($clase);
+        $datos = $bd->obtenerRankingClases($centro);
         
         if (empty($datos)) {
             echo '<div class="empty-state">';
@@ -82,13 +88,16 @@ switch ($categoria) {
             echo '</div>';
         } else {
             echo '<table class="ranking-table">';
-            echo '<thead><tr><th>Clase</th><th>Puntuación</th></tr></thead>';
+            echo '<thead><tr><th>Posición</th><th>Clase</th><th>Puntuación</th></tr></thead>';
             echo '<tbody>';
+            $posicion = 1;
             foreach ($datos as $fila) {
                 echo '<tr>';
+                echo '<td><div class="ranking-position"><span class="position-number">' . $posicion . '</span></div></td>';
                 echo '<td>' . htmlspecialchars($fila['clase']) . '</td>';
                 echo '<td><span class="score-badge"><i class="bi bi-star-fill"></i> ' . htmlspecialchars($fila['puntuacionClase']) . '</span></td>';
                 echo '</tr>';
+                $posicion++;
             }
             echo '</tbody></table>';
         }
@@ -105,14 +114,17 @@ switch ($categoria) {
             echo '</div>';
         } else {
             echo '<table class="ranking-table">';
-            echo '<thead><tr><th>Nombre</th><th>Clase</th><th>Puntuación</th></tr></thead>';
+            echo '<thead><tr><th>Posición</th><th>Nombre</th><th>Clase</th><th>Puntuación</th></tr></thead>';
             echo '<tbody>';
+            $posicion = 1;
             foreach ($datos as $fila) {
                 echo '<tr>';
+                echo '<td><div class="ranking-position"><span class="position-number">' . $posicion . '</span></div></td>';
                 echo '<td>' . htmlspecialchars($fila['usuario']) . '</td>';
                 echo '<td>' . htmlspecialchars($fila['clase']) . '</td>';
                 echo '<td><span class="score-badge"><i class="bi bi-star-fill"></i> ' . htmlspecialchars($fila['puntuacionIndividual']) . '</span></td>';
                 echo '</tr>';
+                $posicion++;
             }
             echo '</tbody></table>';
         }
