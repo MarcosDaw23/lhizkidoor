@@ -479,6 +479,10 @@ $filas = $bd->obtenerPorEvento($id_evento);
                             <span>Finalizar Ranking</span>
                         </button>
         </form>
+        <button id="btnRecargarRanking" class="btn-recargar">
+                <i class="bi bi-arrow-clockwise"></i>
+                <span>Recargar ranking</span>
+        </button>
                 </div>
     <?php else: ?>
                 <div class="empty-ranking">
