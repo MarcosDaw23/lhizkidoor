@@ -16,7 +16,7 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         margin-bottom: 50px;
         position: relative;
-        overflow: hidden;
+        overflow: visible;
         animation: fadeInScale 0.8s ease;
     }
 
@@ -124,19 +124,6 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
 
     .play-button i {
         font-size: 2.5rem;
-        animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% {
-            transform: translateY(0);
-        }
-        40% {
-            transform: translateY(-10px);
-        }
-        60% {
-            transform: translateY(-5px);
-        }
     }
 
     .secondary-button {
@@ -326,22 +313,18 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
         color: white;
         font-size: 1.5rem;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: box-shadow 0.3s ease;
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         text-decoration: none;
-        position: relative;
-        z-index: 1;
-        margin-bottom: 18px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 10;
     }
 
     .settings-icon-mobile:hover {
-        transform: translateY(-3px) rotate(45deg);
         box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
         color: white;
-    }
-
-    .settings-icon-mobile i {
-        transition: transform 0.3s ease;
     }
 
     @media (max-width: 768px) {
@@ -359,6 +342,11 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
 
         .settings-icon-mobile {
             display: flex;
+            width: 45px;
+            height: 45px;
+            font-size: 1.3rem;
+            top: 15px;
+            right: 15px;
         }
 
         .hero-subtitle {
@@ -377,13 +365,15 @@ $nombreUsuario = $_SESSION['user']['nombre'] ?? 'Usuario';
 </style>
 
 <div class="hero-section">
+    <!-- Botón de configuración en esquina superior derecha -->
+    <a href="./index.php?section=perfil" class="settings-icon-mobile" title="Configuración">
+        <i class="bi bi-gear-fill"></i>
+    </a>
+
     <div class="greeting-container">
         <h1 class="hero-greeting">
             ¡Kaixo, <?= htmlspecialchars($nombreUsuario) ?>!
         </h1>
-        <a href="./index.php?section=perfil" class="settings-icon-mobile" title="Configuración">
-            <i class="bi bi-gear-fill"></i>
-        </a>
     </div>
 
   <?php if (!$yaJugo): ?>
