@@ -472,7 +472,7 @@ $filas = $bd->obtenerPorEvento($id_evento);
 
                 <!-- Botones de acción -->
                 <div class="action-buttons">
-        <form action="./controllers/finalizarRankingEvento.php" method="POST">
+        <form action="./controllers/finalizarRankingEvento.php" method="POST" onsubmit="return confirmarFinalizacion();">
             <input type="hidden" name="id_evento" value="<?= $id_evento ?>">
                         <button type="submit" class="btn-finalizar">
                             <i class="bi bi-check-circle-fill"></i>
@@ -505,6 +505,10 @@ document.getElementById('btnFinalizarEvento').addEventListener('click', function
     document.getElementById('seccionRanking').style.display = 'block';
     this.style.display = 'none';
 });
+
+function confirmarFinalizacion() {
+    return confirm("¿Estás seguro de que quieres finalizar el ranking? No podrás volver a ver los resultados del evento");
+}
 
 // Recargar página para actualizar ranking
 const btnRecargar = document.getElementById('btnRecargarRanking');

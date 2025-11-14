@@ -67,7 +67,7 @@ $usuario = $_SESSION['user'];
           </a>
           <?php if (isset($_SESSION['evento'])): ?>
             <a href="index.php?section=rankingEvento" class="menu-item <?= ($currentSection === 'rankingEvento') ? 'active' : '' ?>">
-              <i class="bi bi-bar-chart"></i>
+              <i class="bi bi-calendar2-check"></i>
               <span>Visualizar Evento</span>
             </a>
           <?php endif; ?>
