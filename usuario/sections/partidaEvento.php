@@ -5,18 +5,19 @@ if (!isset($_SESSION['user'])) {
   header("Location: ../auth/index.php?section=login");
   exit;
 }
-$bd = new AccesoBD_Usuario();
-$jugado = $bd->eventoYaJugado($_SESSION['user']['nombre']);
-$rama = $bd->obtenerIdRamaPorSector($_SESSION['user']['sector']);
-
-if($jugado===true){
-  header("Location: index.php?section=resultadosPartidas");
-  exit;
-}
 
 $eventoId = $_GET['evento'] ?? null;
 if (!$eventoId) {
   echo "<div class='text-center mt-5'><h3>❌ Evento no válido o inexistente.</h3></div>";
+  exit;
+}
+
+$bd = new AccesoBD_Usuario();
+$jugado = $bd->eventoYaJugado($_SESSION['user']['nombre'], $eventoId);
+$rama = $bd->obtenerIdRamaPorSector($_SESSION['user']['sector']);
+
+if($jugado===true){
+  header("Location: index.php?section=resultadoEvento&evento=$eventoId");
   exit;
 }
 $evento = $bd->obtenerEventoPorId($eventoId);

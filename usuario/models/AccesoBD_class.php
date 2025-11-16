@@ -123,13 +123,13 @@ public function obtenerEventoPorId($eventoId) {
     return $result['nombre'] ?? 'Desconocido';
     }
 
-    public function eventoYaJugado($alumno) {
+    public function eventoYaJugado($alumnoNombre, $eventoId) {
         $db = new AccesoBD();
         $conn = $db->conexion;
 
-        $sql = "SELECT * FROM evento_ranking WHERE alumno = ?";
+        $sql = "SELECT * FROM evento_ranking WHERE alumno = ? AND id_evento = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $alumno);
+        $stmt->bind_param("si", $alumnoNombre, $eventoId);
         $stmt->execute();
         $result = $stmt->get_result();
 
