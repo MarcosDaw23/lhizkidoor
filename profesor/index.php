@@ -106,6 +106,16 @@ $usuario = $_SESSION['user'];
 
         <!-- Área de Contenido -->
         <main class="content-area">
+          <?php if (isset($_SESSION['mensaje'])): ?>
+        <div class="alert alert-<?php echo $_SESSION['tipo_mensaje']; ?> alert-dismissible fade show" role="alert">
+            <?php echo htmlspecialchars($_SESSION['mensaje']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+        <?php
+            unset($_SESSION['mensaje']);
+            unset($_SESSION['tipo_mensaje']);
+        ?>
+    <?php endif; ?>
           <?php 
             $view = "home"; 
             if (isset($_GET['section'])) {

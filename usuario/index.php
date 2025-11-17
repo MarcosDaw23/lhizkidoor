@@ -396,57 +396,78 @@ $currentPage = $_GET['section'] ?? 'home';
 </head>
 
 <script>
-/**
- * 🎵 Reproductor persistente entre páginas
- * Mantiene la música sonando aunque cambies de sección o se recargue el contenido.
- */
 (function() {
-    // Verificar si ya existe el reproductor global
     if (!window.globalMusicPlayer) {
-        const audio = new Audio("../core/musica/Entrada.wav");
+
+        const audio = new Audio();
         audio.loop = true;
-        audio.volume = 0.5;
+        audio.volume = 0.4;
         window.globalMusicPlayer = audio;
 
-        // Restaurar progreso guardado
-        const savedTime = localStorage.getItem('musicTime');
-        if (savedTime) audio.currentTime = parseFloat(savedTime);
+        // Archivo REAL que está sonando
+        window.currentMusicFile = null;
 
-        // Guardar progreso al salir
-        window.addEventListener('beforeunload', () => {
-            if (!audio.paused) {
-                localStorage.setItem('musicTime', audio.currentTime);
-            }
-        });
-
-        // Solo reproducir en secciones del juego
-        const playSections = ['preguntas', 'resultadosPartidas', 'preguntasEvento', 'jugarPartidaSemanal', 'partidaEvento', 'resultadoEvento', 'resultadoTraduccion', 'traduccionJuego' ];
+        // Solo nombres de archivo (no rutas completas)
+        const musicBySection = {
+            preguntas: "suma1.mp3",
+            resultadosPartidas: "suma1.mp3",
+            preguntasEvento: "evento.mp3",
+            jugarPartidaSemanal: "suma1.mp3",
+            partidaEvento: "evento.mp3",
+            resultadoEvento: "evento.mp3",
+            resultadoTraduccion: "traduccion.mp3",
+            traduccionJuego: "traduccion.mp3"
+        };
 
         function handleMusic() {
-            const section = new URL(window.location.href).searchParams.get('section');
-            if (playSections.includes(section)) {
-                audio.play().catch(() => {
-                    const resume = () => {
-                        audio.play();
-                        document.removeEventListener('click', resume);
-                    };
-                    document.addEventListener('click', resume);
-                });
-            } else {
+
+            // Sección actual (URL o AJAX)
+            const section = window.currentSection ||
+                new URL(window.location.href).searchParams.get("section");
+
+            if (!section || !musicBySection[section]) {
                 audio.pause();
-                audio.currentTime = 0;
+                return;
             }
+
+            // Nuevo archivo solicitado
+            const newFile = musicBySection[section];
+            const newSrc = "../core/musica/" + newFile;
+
+            // Si es el MISMO archivo, no reiniciamos
+            if (window.currentMusicFile === newFile) {
+                audio.play();
+                return;
+            }
+
+            // Cambiamos música
+            window.currentMusicFile = newFile;
+            audio.src = newSrc;
+            audio.currentTime = 0;
+
+            audio.play().catch(() => {
+                const resume = () => {
+                    audio.play();
+                    document.removeEventListener("click", resume);
+                };
+                document.addEventListener("click", resume);
+            });
         }
 
-        // Detectar navegación
-        window.addEventListener('load', handleMusic);
-        window.addEventListener('popstate', handleMusic);
+        window.addEventListener("load", handleMusic);
+        window.addEventListener("popstate", handleMusic);
 
-        // Para navegación AJAX
-        if (typeof loadSection === 'function') {
-            const originalLoadSection = loadSection;
+        // Navegación AJAX
+        if (typeof loadSection === "function") {
+
+            const originalLoad = loadSection;
+
             loadSection = async function(url, push = true) {
-                await originalLoadSection(url, push);
+
+                const params = new URL(url, window.location.origin).searchParams;
+                window.currentSection = params.get("section");
+
+                await originalLoad(url, push);
                 handleMusic();
             };
         }
@@ -456,12 +477,6 @@ $currentPage = $_GET['section'] ?? 'home';
 
 
 <body>
-
-    <audio id="bg-music" autoplay loop>
-        <source src="../core/musica/casa3.wav" type="audio/mpeg">
-    </audio>
-
-
     <!-- Navbar Desktop -->
    <nav class="navbar-desktop">
     <div class="container">
@@ -575,69 +590,7 @@ $currentPage = $_GET['section'] ?? 'home';
         }, 3000);
     </script>
 
-     <script>
-        // Auto cerrar alertas después de 3 segundos
-        setTimeout(() => {
-            const alert = document.querySelector('.alert');
-            if (alert) {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            }
-        }, 3000);
-
-// === 🎵 Música persistente solo durante el juego ===
-const music = document.getElementById('bg-music');
-music.volume = 0.5;
-
-// 🔹 Recuperar tiempo guardado (si existe)
-const savedTime = localStorage.getItem('musicTime');
-if (savedTime) {
-    music.currentTime = parseFloat(savedTime);
-}
-
-// 🔹 Saber si estamos en una sección donde debe sonar
-function shouldPlayMusic() {
-    const section = new URL(window.location.href).searchParams.get('section');
-    return ['preguntas', 'resultadosPartidas'].includes(section);
-}
-
-// 🔹 Reproducir o detener según la sección
-function handleMusic() {
-    if (shouldPlayMusic()) {
-        music.play().catch(() => {
-            const enableMusic = () => {
-                music.play();
-                document.removeEventListener('click', enableMusic);
-            };
-            document.addEventListener('click', enableMusic);
-        });
-    } else {
-        music.pause();
-        music.currentTime = 0;
-        localStorage.removeItem('musicTime');
-    }
-}
-
-// 🔹 Guardar el punto actual antes de recargar o cambiar de página
-window.addEventListener('beforeunload', () => {
-    if (!music.paused && shouldPlayMusic()) {
-        localStorage.setItem('musicTime', music.currentTime);
-    }
-});
-
-// 🔹 Limpieza si salimos del juego
-window.addEventListener('popstate', handleMusic);
-window.addEventListener('load', handleMusic);
-
-// Si usas AJAX (loadSection), asegúrate de volver a evaluar:
-if (typeof loadSection === 'function') {
-    const originalLoadSection = loadSection;
-    loadSection = async function(url, push = true) {
-        await originalLoadSection(url, push);
-        handleMusic();
-    };
-}
-
+    <script>
 
         // === ⚡ Carga AJAX de secciones (sin recargar la página) ===
         const mainContainer = document.getElementById('main-container');

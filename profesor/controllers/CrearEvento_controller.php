@@ -11,6 +11,12 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['rol'] != 2) {
     header("Location: ../../auth/index.php?section=login");
     exit;
 }
+if (isset($_SESSION['evento'])) {
+    $_SESSION['mensaje']="Ya hay un evento en marcha";
+    $_SESSION['tipo_mensaje'] = "danger";
+    header("Location: ../index.php?section=rankingEvento");
+    exit;
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombreEvento = trim($_POST['nombre'] ?? '');
     $num_preguntas = intval($_POST['num_preguntas'] ?? 10);
