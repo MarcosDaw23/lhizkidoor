@@ -80,7 +80,7 @@ switch ($categoria) {
         break;
         
     case 'clases':
-        $datos = $bd->obtenerRankingClases($clase);
+        $datos = $bd->obtenerRankingClases($centro);
         
         if (empty($datos)) {
             echo '<div class="empty-state">';
