@@ -27,10 +27,6 @@ if (!$evento) {
     exit;
 }
 
-$fechaFin = strtotime($evento['fechaFin']);
-date_default_timezone_set('Europe/Madrid'); // Ajusta a tu zona horaria
-$ahora = date('Y-m-d H:i:s');
-
 if ($jugado) {
     $_SESSION['mensaje'] = 'Ya jugaste este evento';
     $_SESSION['tipo_mensaje'] = 'danger';
@@ -38,7 +34,9 @@ if ($jugado) {
     exit;
 }
 
-if ($ahora > $fechaFin) {
+$fechaFin = $evento['fechaFin'];
+
+if (!is_null($fechaFin)) {
     $_SESSION['mensaje'] = 'El evento ya finalizó';
     $_SESSION['tipo_mensaje'] = 'danger';
     header("Location: index.php");
