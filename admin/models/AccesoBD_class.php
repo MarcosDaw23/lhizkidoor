@@ -123,6 +123,8 @@ class AccesoBD_Admin {
         $centro   = $user->getCentro() ? intval($user->getCentro()) : "NULL";
         $sector   = $user->getSector() ? intval($user->getSector()) : "NULL";
         $clase    = $user->getClase() ? intval($user->getClase()) : "NULL";
+        $idioma   = mysqli_real_escape_string($conn, $user->getIdioma());
+        $puntuacionIndividual = intval($user->getpuntuacionIndividual());
         $rol      = 2; 
         $password = md5($password);
 
@@ -136,9 +138,9 @@ class AccesoBD_Admin {
 
         $fechaConfirmacion = date('Y-m-d H:i:s');
         $sqlInsert = "
-            INSERT INTO user (rol, nombre, apellido, mail, password, centro, sector, clase, token, fechaConfirmacion)
+            INSERT INTO user (rol, nombre, apellido, mail, password, centro, sector, clase, idioma, puntuacionIndividual, token, fechaConfirmacion)
             VALUES ($rol, '$nombre', '$apellido', '$email', '$password', 
-                    $centro, $sector, $clase, NULL, '$fechaConfirmacion')
+                    $centro, $sector, $clase, '$idioma', $puntuacionIndividual, NULL, '$fechaConfirmacion')
         ";
 
         $resultado = $db->lanzarSQL($sqlInsert);

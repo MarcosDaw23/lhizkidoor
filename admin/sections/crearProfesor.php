@@ -1,7 +1,3 @@
-<link rel="stylesheet" href="css/adminfinal.css">
-
-
-
 <div class="create-profesor-container">
   <div class="create-profesor-card">
     <div class="card-header-custom">

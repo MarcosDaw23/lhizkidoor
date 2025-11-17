@@ -1,7 +1,4 @@
-<link rel="stylesheet" href="css/profesorfinal.css">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 
 <div class="estadisticas-container">
   <div class="estadisticas-header">

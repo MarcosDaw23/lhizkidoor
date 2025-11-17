@@ -24,13 +24,8 @@ switch ($action) {
 
     $_SESSION['resultados'][] = [
       'definicion' => $preguntas[$indice]['definicion'],
-      'opciones' => [
-        1 => $preguntas[$indice]['eusk1'],
-        2 => $preguntas[$indice]['eusk2'],
-        3 => $preguntas[$indice]['eusk3']
-      ],
-      'respuesta' => $respuesta,
-      'correcta' => $correcta
+      'respuesta' => $preguntas[$indice]['eusk' . $respuesta],
+      'correcta' => $preguntas[$indice]['eusk' . $correcta]
     ];
 
     if ($respuesta == $correcta) {

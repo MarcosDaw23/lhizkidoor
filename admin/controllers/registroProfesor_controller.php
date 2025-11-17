@@ -17,23 +17,24 @@ $rol        = 2;
 if ($pass1 !== $pass2) {
     $_SESSION['mensaje'] = "Las contraseñas no coinciden.";
     $_SESSION['tipo_mensaje'] = "danger";
-    header('Location: ../index.php?section=registroProfesor');
+    header('Location: ../index.php?section=crearProfesor');
     exit;
 }
 
 $user = new User(
-    null,               
-    $rol,               
-    $nombre,
-    $apellido,
-    $email,
-    $pass1,
-    $centro,
-    $sector,
-    $clase,
-    0,                  // puntuacionIndividual -> agregado
-    null,               
-    date('Y-m-d H:i:s') 
+    null,               // id
+    $rol,               // rol
+    $nombre,            // nombre
+    $apellido,          // apellido
+    $email,             // email
+    $pass1,             // password
+    $centro,            // centro
+    $sector,            // sector
+    $clase,             // clase
+    'español',          // idioma (por defecto español para profesores)
+    0,                  // puntuacionIndividual
+    null,               // token
+    date('Y-m-d H:i:s') // fechaConfirmacion
 );
 
 $bd = new AccesoBD_Admin();
@@ -42,12 +43,12 @@ $exito = $bd->registrarProfesor($user);
 if ($exito) {
     $_SESSION['mensaje'] = "Profesor registrado de forma satisfactoria";
     $_SESSION['tipo_mensaje'] = "success";
-    header("Location: ../../admin/index.php?section=gestionUsuarios");
+    header("Location: ../index.php?section=gestionUsuarios");
     exit;
 } else {
     $_SESSION['mensaje'] = "No se pudo registrar el profesor";
     $_SESSION['tipo_mensaje'] = "danger";
-    header("Location: ../../admin/index.php?section=registroProfesor");
+    header("Location: ../index.php?section=crearProfesor");
     exit;
 }
 ?>
