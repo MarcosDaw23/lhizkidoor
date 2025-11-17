@@ -489,6 +489,8 @@ public function obtenerRankingClaseIndividual($centro){
     return $ranking;
 }
 
+    
+
 public function obtenerRankingClases($centro){
     $db = new AccesoBD();
     $conn = $db->conexion;

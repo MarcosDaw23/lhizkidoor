@@ -13,6 +13,7 @@ $action = $_GET['action'] ?? 'start';
 $evento = isset($_GET['evento']) ? intval($_GET['evento']) : null;
 $_SESSION['evento'] = $evento;
 $nombre = $_SESSION['user']['nombre'];
+$_SESSION['resultados'] = $_SESSION['resultados'] ?? [];
 
 switch ($action) {
 

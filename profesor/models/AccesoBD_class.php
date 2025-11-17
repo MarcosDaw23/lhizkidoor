@@ -36,6 +36,25 @@ class AccesoBD_Profesor {
         return $usuarios;
     }
 
+    function actualizarFechaFin($id)
+{
+    $db = new AccesoBD();
+    $conn = $db->conexion;
+
+    $sql = "UPDATE eventos SET fechaFin = NOW() WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+
+    $stmt->execute();
+    $ok = $stmt->affected_rows; // número de filas afectadas
+
+    $stmt->close();
+    $db->cerrarConexion();
+
+    return $ok > 0; // true si se actualizó al menos una fila
+}
+
+
     // 3️⃣ Obtener todos los registros de un evento específico
     public function obtenerPorEvento($id_evento) {
         $db = new AccesoBD();
