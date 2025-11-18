@@ -1,0 +1,191 @@
+Descripción general
+
+admin/ → gestión completa de usuarios y control interno del sistema
+
+auth/ → registro, login y verificación de cuentas
+
+core/ → corazón de la aplicación (clases, router, base de datos, helpers…)
+
+profesor/ → funciones especiales como crear eventos, ver estadísticas, gestionar glosario
+
+usuario/ → jugar partidas, ver rankings, glosario, perfil del usuario
+
+vendor/ → librerías externas como PHPMailer y Composer
+
+index.php → entrada al enrutador
+
+lhizki.sql → base de datos del proyecto
+
+Esquema:
+LHIZKIDOOR/
+│
+├── admin/                      # Módulo para administradores del sistema
+│   ├── controllers/            # Controladores de acciones del administrador
+│   │     actualizarUsuarios_controller.php
+│   │     borrarUsuarios_controller.php
+│   │     filtrarUsuarios_controller.php
+│   │     getClases_controller.php
+│   │     getSectores_controller.php
+│   │     obtenerUsuarios_controller.php
+│   │     registroProfesor_controller.php
+│   │
+│   ├── css/                    # Estilos para la vista del administrador
+│   │     adminfinal.css
+│   │     estilos.css
+│   │
+│   ├── img/                    # Imágenes del panel admin
+│   │
+│   ├── js/                     # Scripts específicos del admin
+│   │
+│   ├── models/                 # Acceso a base de datos y clases admin
+│   │     AccesoBD_class.php
+│   │     usuario.class.php
+│   │
+│   └── sections/               # Vistas del administrador
+│         crearProfesor.php
+│         editarUsuarios.php
+│         gestionUsuarios.php
+│         home.php
+│         perfil.php
+│         index.php
+│
+├── auth/                       # Módulo de autenticación y registro general
+│   ├── controllers/            # Controladores de login, registro y logout
+│   │     getClases_controller.php
+│   │     getSectores_controller.php
+│   │     login_controller.php
+│   │     logout_controller.php
+│   │     registro_controller.php
+│   │
+│   ├── css/                    # Estilos del login/registro
+│   ├── img/                    # Imágenes del módulo auth
+│   ├── js/                     # Scripts
+│   ├── models/                 # Acceso a BD para autenticación
+│   │     AccesoBD_class.php
+│   │
+│   └── sections/               # Vistas de autenticación
+│         confirmarCuenta.php
+│         login.php
+│         registro.php
+│         index.php
+│
+├── core/                       # Núcleo del sistema (la lógica principal)
+│   ├── Modelos/                # Clases antiguas o base del sistema
+│   │     Centro_class.php
+│   │     Clases_class.php
+│   │     Diccionario_class.php
+│   │     Eventos_class.php
+│   │     Palabra_class.php
+│   │     Ranking_class.php
+│   │     Roles_class.php
+│   │     Sectores_class.php
+│   │     User_class.php
+│   │
+│   ├── modelosPrincipales/     # Clases actualizadas y principales del sistema
+│   │     Centro.class.php
+│   │     Clases.class.php
+│   │     Diccionario.class.php
+│   │     Juegos.class.php
+│   │     Ramas.class.php
+│   │     Ranking.class.php
+│   │     Roles.class.php
+│   │     Sectores.class.php
+│   │     User.class.php
+│   │
+│   ├── musica/                 # Archivos de audio utilizados en juegos/eventos
+│   │     evento.mp3
+│   │     preguntas.mp3
+│   │     suma1.mp3
+│   │     suma2.mp3
+│   │     traduccion.mp3
+│   │
+│   ├── Auth.php                # Gestión de sesiones y autenticación
+│   ├── autoload.php            # Carga automática de clases
+│   ├── config.php              # Configuración del sistema
+│   ├── Controller.php          # Clase base de controladores
+│   ├── Database.php            # Conexión y herramientas para la BD
+│   ├── Helpers.php             # Funciones auxiliares
+│   ├── idiomas.php             # Gestión de idiomas
+│   ├── Router.php              # Sistema de rutas
+│   ├── Routes.php              # Definición de rutas y controladores
+│   └── SessionManager.php      # Manejo de sesiones
+│
+├── profesor/                   # Módulo para profesores
+│   ├── controllers/            # Controladores de funcionalidades del profesor
+│   │     actualizarUsuarios_controller.php
+│   │     CrearEvento_controller.php
+│   │     finalizarRankingEvento.php
+│   │     obtenerGlosario_controller.php
+│   │     ObtenerEstadisticas.php
+│   │     SumarPalabraDiccionario_controller.php
+│   │     SumarPalabraGlosario_controller.php
+│   │
+│   ├── css/                    # Estilos del módulo profesor
+│   ├── img/
+│   ├── js/
+│   ├── models/                 # Acceso BD del profesor
+│   │     AccesoBD_class.php
+│   │
+│   └── sections/               # Vistas del profesor
+│         crearEventos.php
+│         Estadisticas.php
+│         home.php
+│         perfil.php
+│         ranking_ajax.php
+│         rankingEvento.php
+│         rankings.php
+│         SumarPalabras.php
+│         verGlosario.php
+│         index.php
+│
+├── usuario/                    # Módulo para usuarios estándar
+│   ├── controllers/            # Controladores de partidas y glosario
+│   │     actualizarPerfil_controller.php
+│   │     obtenerGlosario_controller.php
+│   │     partidaSemanal_controller.php
+│   │     preguntas_controller.php
+│   │     preguntasEvento_controller.php
+│   │     traduccion_controller.php
+│   │
+│   ├── css/
+│   ├── img/
+│   ├── js/
+│   ├── models/                 # Acceso BD del usuario
+│   │     AccesoBD_class.php
+│   │
+│   └── sections/               # Vistas del usuario
+│         home.php
+│         juegos.php
+│         jugarPartidaSemanal.php
+│         partidaEvento.php
+│         perfil.php
+│         preguntas.php
+│         preguntasEvento.php
+│         ranking_ajax.php
+│         rankings.php
+│         resultadoEvento.php
+│         resultadosPartidas.php
+│         resultadoTraduccion.php
+│         traduccionJuego.php
+│         verGlosario.php
+│         index.php
+│
+├── vendor/                     # Dependencias instaladas con Composer
+│   ├── composer/
+│   ├── phpmailer/
+│   ├── autoload.php
+│   ├── composer.json
+│   └── composer.lock
+│
+├── index.php                   # Punto de entrada principal del sistema
+└── lhizki.sql                  # Script SQL con la estructura de la base de datos
+
+
+Recomendaciones/Avisos
+La aplicacion usa en casi todas las aplicaciones rutas globales (no ha dado tiempo al config, problemas tecnicos), que funcionan en cualquier momento,
+pero por ejemplo los mail de confirmacion de cuenta y de eventos, usan rutas de archivo, por lo que para que funcionen
+se debe establecer la aplicacion con esta configuracion:
+
+http://localhost/lhizkidoor/auth/index.php?section=
+
+En resumen, en caso de que falle alguna ruta de la aplicacion, es porque son de archivo, por lo que la estructura deberia seguir la de arriba.
